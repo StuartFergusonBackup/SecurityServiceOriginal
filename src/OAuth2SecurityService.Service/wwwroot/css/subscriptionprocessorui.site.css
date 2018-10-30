@@ -1,0 +1,17 @@
+﻿.page-header .img-responsive {
+    float: right;
+}
+
+button.navbar-toggle {
+    display: none;
+}
+
+
+span.navbar-brand */ {
+    color: #333;
+}
+
+.navbar-inverse {
+    background-color: #FFF;
+    border-bottom: 3px solid #DC5D1C;
+}
