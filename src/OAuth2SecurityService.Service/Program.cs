@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
-namespace OAuth2Security.Service
+namespace OAuth2SecurityService.Service
 {
     public class Program
     {
-
         public static void Main(String[] args)
         {
             var host = BuildWebHost(args);
@@ -22,7 +16,7 @@ namespace OAuth2Security.Service
 
         public static IWebHost BuildWebHost(String[] args)
         {
-            Console.Title = "OAuth2 Security Service";
+            Console.Title = "Security Service";
 
             String environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
@@ -31,8 +25,7 @@ namespace OAuth2Security.Service
                 .AddJsonFile($"hosting.{environmentName}.json", optional: true)
                 .Build();
 
-            IWebHost host = new WebHostBuilder().UseKestrel().UseConfiguration(config)
-                .UseContentRoot(Directory.GetCurrentDirectory()).UseStartup<Startup>().Build();
+            IWebHost host = new WebHostBuilder().UseKestrel().UseConfiguration(config).UseContentRoot(Directory.GetCurrentDirectory()).UseStartup<Startup>().Build();
 
             return host;
         }
