@@ -79,4 +79,10 @@
   <ItemGroup>
     <ProjectReference Include="..\OAuth2SecurityService.Manager\OAuth2SecurityService.Manager.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="docker-compose.integration.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
