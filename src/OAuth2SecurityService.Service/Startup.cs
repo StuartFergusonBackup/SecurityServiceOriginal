@@ -315,6 +315,12 @@ namespace OAuth2SecurityService.Service
                 AuthenticationDbContext authenticationDbContext = scope.ServiceProvider.GetRequiredService<AuthenticationDbContext>();
 
                 var seedingType = Configuration.GetValue<SeedingType>("SeedingType");
+
+                if (seedingType == SeedingType.Production)
+                {
+                    throw new NotImplementedException("Production setup not complete yet");
+                }
+
                 DatabaseSeeding.InitialiseDatabase(configurationDbContext, persistedGrantDbContext, authenticationDbContext, seedingType);                
             }
         }
