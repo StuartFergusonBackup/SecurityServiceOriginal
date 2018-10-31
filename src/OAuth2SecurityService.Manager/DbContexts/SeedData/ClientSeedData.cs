@@ -19,7 +19,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
         public static List<Client> GetClients(SeedingType seedingType)
         {
             List<Client> clients = new List<Client>();
-            
+                       
             // Developer Client
             clients.Add(CreateDeveloperClient(seedingType));
             
@@ -39,18 +39,38 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
         /// <returns></returns>
         private static Client CreateDeveloperClient(SeedingType seedingType)
         {
+            Client client = null;
+
             // Setup the scopes
             List<String> scopes = new List<String>();
             scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Select(y => y.Name).ToList());
 
-            Client client = new Client
+            if (seedingType == SeedingType.IntegrationTest)
             {
-                ClientId = "developerClient",
-                ClientName = "Developer Access Client",
-                ClientSecrets = { new Secret("developerClient".Sha256()) },
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
-                AllowedScopes = scopes
-            };
+                client = new Client
+                {
+                    ClientId = "integrationTestClient",
+                    ClientName = "Integration Test Client",
+                    ClientSecrets = {new Secret("integrationTestClient".Sha256())},
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedScopes = scopes
+                };
+            }
+            else if (seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
+            {
+                client = new Client
+                {
+                    ClientId = "developerClient",
+                    ClientName = "Developer Client",
+                    ClientSecrets = {new Secret("developerClient".Sha256())},
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    AllowedScopes = scopes
+                };
+            }
+            else if (seedingType == SeedingType.Production)
+            {
+                // TODO
+            }
 
             return client;
         }
