@@ -32,7 +32,7 @@ namespace OAuth2SecurityService.IntegrationTests
     public class IntegrationTests
     {
         public const String TestClientId = "integrationTestClient";
-        public const String TestClientSecret = "integrationTestClientSecret";
+        public const String TestClientSecret = "integrationTestClient";
         public const String BaseAddress = "http://localhost:5001";
 
         [Fact]
