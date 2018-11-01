@@ -10,11 +10,14 @@ services:
       MYSQL_ROOT_PASSWORD: Pa55word
     ports: 
     - "3366:3306"
+    - "33660:33060"
 
   managementapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=integrationtest
     image: stuartferguson/golfhandicapping:securityservice
+    command: sh -c './wait-for db:3306'
     restart: always
     ports:
     - "5001:5001"
+    
