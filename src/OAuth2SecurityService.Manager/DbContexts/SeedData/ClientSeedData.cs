@@ -52,7 +52,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
                     ClientId = "integrationTestClient",
                     ClientName = "Integration Test Client",
                     ClientSecrets = {new Secret("integrationTestClient".Sha256())},
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
                     AllowedScopes = scopes
                 };
             }
