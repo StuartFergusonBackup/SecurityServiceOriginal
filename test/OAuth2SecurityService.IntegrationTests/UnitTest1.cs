@@ -49,7 +49,7 @@ namespace OAuth2SecurityService.IntegrationTests
             {
                 client.BaseAddress = new Uri(BaseAddress);
                 
-                var response = await client.PostAsync("connect/token", content, CancellationToken.None);
+                var response = await client.PostAsync("/connect/token", content, CancellationToken.None);
 
                 response.EnsureSuccessStatusCode();
 
