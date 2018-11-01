@@ -13,17 +13,27 @@ namespace OAuth2SecurityService.Manager.DbContexts
                                               PersistedGrantDbContext persistedGrantDbContext, 
                                               AuthenticationDbContext authenticationDbContext,
                                               SeedingType seedingType)
-        {            
-            configurationDbContext.Database.Migrate();
-            persistedGrantDbContext.Database.Migrate();
-            authenticationDbContext.Database.Migrate();
+        {
+            try
+            {
+                configurationDbContext.Database.Migrate();
+                //persistedGrantDbContext.Database.Migrate();
+                //authenticationDbContext.Database.Migrate();
 
-            AddClients(configurationDbContext, seedingType);
-            AddApiResources(configurationDbContext, seedingType);
+                AddClients(configurationDbContext, seedingType);
+                AddApiResources(configurationDbContext, seedingType);
 
-            configurationDbContext.SaveChanges();
-            persistedGrantDbContext.SaveChanges();
-            authenticationDbContext.SaveChanges();
+                configurationDbContext.SaveChanges();
+                //persistedGrantDbContext.SaveChanges();
+                //authenticationDbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                var connString = configurationDbContext.Database.GetDbConnection().ConnectionString;
+
+                Exception newException = new Exception($"Connection String [{connString}]", ex);
+                throw newException;
+            }
         }
 
         private static void AddClients(ConfigurationDbContext context, SeedingType seedingType)
