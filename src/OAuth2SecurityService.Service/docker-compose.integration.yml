@@ -2,16 +2,6 @@
 
 services:
 
-  db:
-    image: mysql
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: Pa55word
-    ports: 
-    - "3366:3306"
-    - "33660:33060"
-
   managementapi:
     environment:
       - ASPNETCORE_ENVIRONMENT=integrationtest

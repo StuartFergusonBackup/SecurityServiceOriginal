@@ -130,8 +130,11 @@ namespace OAuth2SecurityService.Service
 
             app.UseMvcWithDefaultRoute();
 
-            // Setup the database
-            this.InitialiseDatabase(app, env).Wait();
+            if (!HostingEnvironment.IsEnvironment("IntegrationTest"))
+            {
+                // Setup the database
+                this.InitialiseDatabase(app, env).Wait();
+            }
 
             app.UseMvc();
             app.UseSwagger();
@@ -223,20 +226,37 @@ namespace OAuth2SecurityService.Service
                 o.Password.RequiredLength = Configuration.GetValue<Int32>("IdentityOptions:PasswordOptions:RequiredLength");
             }).AddEntityFrameworkStores<AuthenticationDbContext>().AddDefaultTokenProviders();
 
-            services.AddIdentityServer(options =>
+
+            if (HostingEnvironment.IsEnvironment("IntegrationTest"))
+            {
+                services.AddIdentityServer(options =>
                     {
                         options.Events.RaiseSuccessEvents = true;
                         options.Events.RaiseFailureEvents = true;
                         options.Events.RaiseErrorEvents = true;
                         options.PublicOrigin = Configuration.GetValue<String>("PublicOrigin");
                     })
-                .AddConfigurationStore()
-                .AddOperationalStore()
-                .AddDeveloperSigningCredential()
-                .AddIdentityServerStorage(ConfigurationConnectionString)
-                .AddAspNetIdentity<IdentityUser>()
-                .AddJwtBearerClientAuthentication();
-
+                    .AddDeveloperSigningCredential()
+                    .AddAspNetIdentity<IdentityUser>()
+                    .AddJwtBearerClientAuthentication()
+                    .AddIntegrationTestConfiguration();
+            }
+            else
+            {
+                services.AddIdentityServer(options =>
+                        {
+                            options.Events.RaiseSuccessEvents = true;
+                            options.Events.RaiseFailureEvents = true;
+                            options.Events.RaiseErrorEvents = true;
+                            options.PublicOrigin = Configuration.GetValue<String>("PublicOrigin");
+                        })
+                    .AddConfigurationStore()
+                    .AddOperationalStore()
+                    .AddDeveloperSigningCredential()
+                    .AddIdentityServerStorage(ConfigurationConnectionString)
+                    .AddAspNetIdentity<IdentityUser>()
+                    .AddJwtBearerClientAuthentication();
+            }
             services.AddCors();
             
             // Read the authentication configuration

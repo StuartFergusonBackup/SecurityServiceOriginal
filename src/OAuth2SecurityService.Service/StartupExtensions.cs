@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OAuth2SecurityService.Manager.DbContexts.SeedData;
 
 namespace OAuth2SecurityService.Service
 {
@@ -79,6 +80,15 @@ namespace OAuth2SecurityService.Service
                                                                  String connectionString)
         {
             builder.Services.AddTransient<IPersistedGrantStore, PersistedGrantStore>();
+
+            return builder;
+        }
+
+        public static IIdentityServerBuilder AddIntegrationTestConfiguration(this IIdentityServerBuilder builder)
+        {
+            builder.AddInMemoryClients(ClientSeedData.GetClients(SeedingType.IntegrationTest));
+            builder.AddInMemoryApiResources(ApiResourceSeedData.GetApiResources(SeedingType.IntegrationTest));
+            //builder.AddTestUsers()
 
             return builder;
         }
