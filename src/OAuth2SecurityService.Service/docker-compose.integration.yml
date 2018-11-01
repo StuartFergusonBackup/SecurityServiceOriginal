@@ -1,13 +1,6 @@
 ﻿version: '3.5'
 
 services:
-  managementapi:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=integrationtest
-    image: stuartferguson/golfhandicapping:securityservice
-    restart: always
-    ports:
-    - "5001:5001"
 
   db:
     image: mysql
@@ -16,5 +9,12 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: Pa55word
     ports: 
-    - "3306:3306"
-    - "33060:33060"
+    - "3366:3306"
+
+  managementapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=integrationtest
+    image: stuartferguson/golfhandicapping:securityservice
+    restart: always
+    ports:
+    - "5001:5001"
