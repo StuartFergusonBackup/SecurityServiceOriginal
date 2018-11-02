@@ -102,6 +102,7 @@ namespace OAuth2SecurityService.Service
                 Username = "integrationtest"
             });
             builder.AddTestUsers(testUsers);
+            builder.AddInMemoryPersistedGrants();
 
             return builder;
         }
