@@ -20,6 +20,9 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
         {
             List<Client> clients = new List<Client>();
                        
+            // Golf Handicapping Admin Web Application Client
+            clients.Add(CreateGolfHandicappingAdminApplicationClient(seedingType));
+
             // Developer Client
             clients.Add(CreateDeveloperClient(seedingType));
             
@@ -70,6 +73,39 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
             else if (seedingType == SeedingType.Production)
             {
                 // TODO
+            }
+
+            return client;
+        }
+        #endregion
+
+        #region private static Client CreateGolfHandicappingAdminApplicationClient(SeedingType seedingType)        
+        /// <summary>
+        /// Creates the admin application client.
+        /// </summary>
+        /// <param name="seedingType">Type of the seeding.</param>
+        /// <returns></returns>
+        private static Client CreateGolfHandicappingAdminApplicationClient(SeedingType seedingType)
+        {
+            Client client = null;
+
+            List<String> scopes = new List<String>();
+            scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Where(r => r.Name ==  "managementApi").Select(y => y.Name).ToList());
+
+            if (seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
+            {
+                client = new Client
+                {
+                    ClientId = "golfhandicappingAdminApplicationClient",
+                    ClientName = "Golf Handicapping Admin Application Client",
+                    ClientSecrets = {new Secret("golfhandicappingAdminApplicationClient".Sha256())},
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedScopes = scopes
+                };
+            }
+            else if (seedingType == SeedingType.Production)
+            {
+                // TODO:
             }
 
             return client;

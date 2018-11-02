@@ -17,15 +17,15 @@ namespace OAuth2SecurityService.Manager.DbContexts
             try
             {
                 configurationDbContext.Database.Migrate();
-                //persistedGrantDbContext.Database.Migrate();
-                //authenticationDbContext.Database.Migrate();
+                persistedGrantDbContext.Database.Migrate();
+                authenticationDbContext.Database.Migrate();
 
                 AddClients(configurationDbContext, seedingType);
                 AddApiResources(configurationDbContext, seedingType);
 
                 configurationDbContext.SaveChanges();
-                //persistedGrantDbContext.SaveChanges();
-                //authenticationDbContext.SaveChanges();
+                persistedGrantDbContext.SaveChanges();
+                authenticationDbContext.SaveChanges();
             }
             catch (Exception ex)
             {
