@@ -87,7 +87,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
         /// <returns></returns>
         private static Client CreateGolfHandicappingAdminApplicationClient(SeedingType seedingType)
         {
-            Client client = null;
+            Client client = new Client();
 
             List<String> scopes = new List<String>();
             scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Where(r => r.Name ==  "managementApi").Select(y => y.Name).ToList());
