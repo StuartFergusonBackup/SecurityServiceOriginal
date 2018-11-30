@@ -130,9 +130,9 @@ namespace OAuth2SecurityService.Service
 
             app.UseMvcWithDefaultRoute();
 
+            // Setup the database
             if (!HostingEnvironment.IsEnvironment("IntegrationTest"))
             {
-                // Setup the database
                 this.InitialiseDatabase(app, env).Wait();
             }
 
@@ -226,7 +226,7 @@ namespace OAuth2SecurityService.Service
                 o.Password.RequiredLength = Configuration.GetValue<Int32>("IdentityOptions:PasswordOptions:RequiredLength");
             }).AddEntityFrameworkStores<AuthenticationDbContext>().AddDefaultTokenProviders();
 
-
+            //Logger.LogDebug(HostingEnvironment.EnvironmentName);
             if (HostingEnvironment.IsEnvironment("IntegrationTest"))
             {
                 services.AddIdentityServer(options =>

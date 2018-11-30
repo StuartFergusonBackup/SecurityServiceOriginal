@@ -2,6 +2,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Shared.General;
 
 namespace OAuth2SecurityService.Service
 {
@@ -11,7 +12,15 @@ namespace OAuth2SecurityService.Service
         {
             var host = BuildWebHost(args);
 
-            host.Run();
+            try
+            {
+                host.Run();
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e);
+            }
+            
         }
 
         public static IWebHost BuildWebHost(String[] args)

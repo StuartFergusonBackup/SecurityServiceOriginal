@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System;
 using Newtonsoft.Json;
 
-namespace SecurityService.DataTransferObjects
+namespace OAuth2SecurityService.IntegrationTests
 {
-    public class ClientToken
+    public class UserTokenReponse
     {
         #region Constructors
 
@@ -18,6 +16,9 @@ namespace SecurityService.DataTransferObjects
 
         [JsonProperty("expires_in")]
         public Int32 ExpiresIn { get; set; }
+
+        [JsonProperty("token_type")]
+        public String TokenType { get; set; }
 
         #endregion
     }

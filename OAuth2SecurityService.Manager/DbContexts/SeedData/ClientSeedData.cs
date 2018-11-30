@@ -21,7 +21,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
             List<Client> clients = new List<Client>();
                        
             // Golf Handicapping Admin Web Application Client
-            clients.Add(CreateGolfHandicappingAdminApplicationClient(seedingType));
+            //clients.Add(CreateGolfHandicappingAdminApplicationClient(seedingType));
 
             // Developer Client
             clients.Add(CreateDeveloperClient(seedingType));
