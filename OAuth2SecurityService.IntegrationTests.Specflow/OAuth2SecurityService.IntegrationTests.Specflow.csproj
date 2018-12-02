@@ -113,38 +113,55 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="ClientTokenReponse.cs" />
+    <Compile Include="Common\ClientTokenReponse.cs" />
     <Compile Include="Common\GenericSteps.cs" />
-    <Compile Include="GetClientToken.feature.cs">
+    <Compile Include="Common\IntegrationTestsTestData.cs" />
+    <Compile Include="GetToken\GetClientToken.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>GetClientToken.feature</DependentUpon>
     </Compile>
-    <Compile Include="GetTokenSteps.cs" />
-    <Compile Include="GetPasswordToken.feature.cs">
+    <Compile Include="GetToken\GetTokenSteps.cs" />
+    <Compile Include="GetToken\GetPasswordToken.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>GetPasswordToken.feature</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserTokenReponse.cs" />
+    <Compile Include="Common\UserTokenReponse.cs" />
+    <Compile Include="User\RegisterUser.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RegisterUser.feature</DependentUpon>
+    </Compile>
+    <Compile Include="User\UserSteps.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="GetClientToken.feature">
+    <None Include="GetToken\GetClientToken.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GetClientToken.feature.cs</LastGenOutput>
     </None>
-    <None Include="GetPasswordToken.feature">
+    <None Include="GetToken\GetPasswordToken.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GetPasswordToken.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="User\RegisterUser.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RegisterUser.feature.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OAuth2SecurityService.DataTransferObjects\OAuth2SecurityService.DataTransferObjects.csproj">
+      <Project>{50ff6ecd-4223-4262-b14f-433a502e0ceb}</Project>
+      <Name>OAuth2SecurityService.DataTransferObjects</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
@@ -170,7 +187,7 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-	<Error Condition="!Exists('..\packages\SpecFlow.2.4.0\build\SpecFlow.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SpecFlow.2.4.0\build\SpecFlow.targets'))" />
+    <Error Condition="!Exists('..\packages\SpecFlow.2.4.0\build\SpecFlow.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SpecFlow.2.4.0\build\SpecFlow.targets'))" />
     <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.props'))" />
     <Error Condition="!Exists('..\packages\xunit.core.2.4.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.core.2.4.1\build\xunit.core.targets'))" />
     <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.4.1\build\net20\xunit.runner.visualstudio.props'))" />

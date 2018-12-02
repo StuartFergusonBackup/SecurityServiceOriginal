@@ -90,18 +90,18 @@ namespace OAuth2SecurityService.Service
         {
             builder.AddInMemoryClients(ClientSeedData.GetClients(SeedingType.IntegrationTest));
             builder.AddInMemoryApiResources(ApiResourceSeedData.GetApiResources(SeedingType.IntegrationTest));
-            List<TestUser> testUsers = new List<TestUser>();
-            testUsers.Add(new TestUser
-            {
-                Claims = null,
-                IsActive = true,
-                Password = "123456",
-                ProviderName = String.Empty,
-                ProviderSubjectId = "84DC3E90-16B9-441D-B940-37BAA2AC53AF",
-                SubjectId = "84DC3E90-16B9-441D-B940-37BAA2AC53AF",
-                Username = "integrationtest"
-            });
-            builder.AddTestUsers(testUsers);
+            //List<TestUser> testUsers = new List<TestUser>();
+            //testUsers.Add(new TestUser
+            //{
+            //    Claims = null,
+            //    IsActive = true,
+            //    Password = "123456",
+            //    ProviderName = String.Empty,
+            //    ProviderSubjectId = "84DC3E90-16B9-441D-B940-37BAA2AC53AF",
+            //    SubjectId = "84DC3E90-16B9-441D-B940-37BAA2AC53AF",
+            //    Username = "integrationtest"
+            //});
+            //builder.AddTestUsers(testUsers);
             builder.AddInMemoryPersistedGrants();
 
             return builder;

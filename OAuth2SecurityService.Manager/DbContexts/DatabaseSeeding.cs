@@ -21,7 +21,7 @@ namespace OAuth2SecurityService.Manager.DbContexts
                 authenticationDbContext.Database.Migrate();
 
                 AddClients(configurationDbContext, seedingType);
-                AddApiResources(configurationDbContext, seedingType);
+                //AddApiResources(configurationDbContext, seedingType);
 
                 configurationDbContext.SaveChanges();
                 persistedGrantDbContext.SaveChanges();

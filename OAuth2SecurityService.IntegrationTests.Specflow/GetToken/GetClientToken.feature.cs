@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace OAuth2SecurityService.IntegrationTests.Specflow
+namespace OAuth2SecurityService.IntegrationTests.Specflow.GetToken
 {
     using TechTalk.SpecFlow;
     
