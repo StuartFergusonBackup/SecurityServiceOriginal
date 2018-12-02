@@ -16,12 +16,24 @@ namespace OAuth2SecurityService.Manager.DbContexts
         {
             try
             {
-                configurationDbContext.Database.Migrate();
-                persistedGrantDbContext.Database.Migrate();
-                authenticationDbContext.Database.Migrate();
+                if (configurationDbContext.Database.IsMySql())
+                {
+                    configurationDbContext.Database.Migrate();
+                }
+
+                if (persistedGrantDbContext.Database.IsMySql())
+                {
+                    persistedGrantDbContext.Database.Migrate();
+                }
+
+                if (authenticationDbContext.Database.IsMySql())
+                {
+                    authenticationDbContext.Database.Migrate();
+                }
 
                 AddClients(configurationDbContext, seedingType);
-                //AddApiResources(configurationDbContext, seedingType);
+                AddApiResources(configurationDbContext, seedingType);
+                AddUsers(authenticationDbContext, seedingType);
 
                 configurationDbContext.SaveChanges();
                 persistedGrantDbContext.SaveChanges();
@@ -35,7 +47,7 @@ namespace OAuth2SecurityService.Manager.DbContexts
                 throw newException;
             }
         }
-
+        
         private static void AddClients(ConfigurationDbContext context, SeedingType seedingType)
         {
             var clientsToAdd = ClientSeedData.GetClients(seedingType);
@@ -66,6 +78,19 @@ namespace OAuth2SecurityService.Manager.DbContexts
             }
         }
 
-        
+        private static void AddUsers(AuthenticationDbContext context, SeedingType seedingType)
+        {
+            var identityUsers = IdentityUserSeedData.GetIdentityUsers(seedingType);
+
+            foreach (var identityUser in identityUsers)
+            {
+                var foundUser = context.Users.Any(a => a.UserName== identityUser.UserName);
+
+                if (!foundUser)
+                {
+                    context.Users.Add(identityUser);
+                }
+            }
+        }
     }
 }

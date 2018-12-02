@@ -103,7 +103,7 @@ this.FeatureBackground();
 #line 12
  testRunner.And("the secret \'integrationTestClient\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
- testRunner.And("the username \'integrationtest\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the username \'integrationtest@test.co.uk\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 14
  testRunner.And("the password \'123456\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 15

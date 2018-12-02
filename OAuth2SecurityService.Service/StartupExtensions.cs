@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Services;
 using IdentityServer4.EntityFramework.Stores;
+using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Test;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -99,10 +101,20 @@ namespace OAuth2SecurityService.Service
             //    ProviderName = String.Empty,
             //    ProviderSubjectId = "84DC3E90-16B9-441D-B940-37BAA2AC53AF",
             //    SubjectId = "84DC3E90-16B9-441D-B940-37BAA2AC53AF",
-            //    Username = "integrationtest"
+            //    Username = "integrationtest@test.co.uk"
             //});
             //builder.AddTestUsers(testUsers);
+            builder.AddInMemoryUsers(IdentityUserSeedData.GetIdentityUsers(SeedingType.IntegrationTest));
             builder.AddInMemoryPersistedGrants();
+
+            return builder;
+        }
+
+        public static IIdentityServerBuilder AddInMemoryUsers(this IIdentityServerBuilder builder, IEnumerable<IdentityUser> users)
+        {
+            builder.Services.AddSingleton(users);
+
+            builder.Services.AddSingleton<IUserStore<IdentityUser>, InMemoryUserStore>();            
 
             return builder;
         }

@@ -27,10 +27,10 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
             List<IdentityUser> testUsers = new List<IdentityUser>();
             var testUser1 = new IdentityUser
             {
-                UserName = "integrationtest",
-                NormalizedUserName = "integrationtest",
+                UserName = "integrationtest@test.co.uk",
+                NormalizedUserName = "integrationtest@test.co.uk".ToUpper(),
                 Email = "integrationtest@test.co.uk",
-                NormalizedEmail = "integrationtest@test.co.uk",
+                NormalizedEmail = "integrationtest@test.co.uk".ToUpper(),
                 EmailConfirmed = true,
                 Id = "84DC3E90-16B9-441D-B940-37BAA2AC53AF",                                       
             };

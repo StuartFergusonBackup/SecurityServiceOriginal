@@ -226,7 +226,7 @@ namespace OAuth2SecurityService.Service
                     .AddDeveloperSigningCredential()
                     .AddAspNetIdentity<IdentityUser>()
                     .AddJwtBearerClientAuthentication()
-                    .AddIntegrationTestConfiguration();
+                    .AddIntegrationTestConfiguration();                  
 
                 services.AddDbContext<AuthenticationDbContext>(builder =>
                         builder.UseInMemoryDatabase("Authentication"))
