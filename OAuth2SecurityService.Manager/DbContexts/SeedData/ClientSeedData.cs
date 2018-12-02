@@ -56,7 +56,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
                     ClientName = "Integration Test Client",
                     ClientSecrets = {new Secret("integrationTestClient".Sha256())},
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
-                    AllowedScopes = scopes
+                    AllowedScopes = scopes,                    
                 };
             }
             else if (seedingType == SeedingType.Development || seedingType == SeedingType.Staging)

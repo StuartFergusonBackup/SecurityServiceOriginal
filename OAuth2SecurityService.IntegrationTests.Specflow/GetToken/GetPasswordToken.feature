@@ -10,7 +10,7 @@ Background:
 Scenario: Get Password Token
 	Given I have the Client Id 'integrationTestClient'
 	And the secret 'integrationTestClient'
-	And the username 'integrationtest'
+	And the username 'integrationtest@test.co.uk'
 	And the password '123456'
 	When I request a password token
 	Then my password token request is successful

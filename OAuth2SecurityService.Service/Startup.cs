@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
+using OAuth2SecurityService.Manager;
 using OAuth2SecurityService.Manager.DbContexts;
 using OAuth2SecurityService.Manager.DbContexts.SeedData;
 using Shared.General;
@@ -198,21 +200,7 @@ namespace OAuth2SecurityService.Service
         /// <param name="services">The services.</param>
         private static void ConfigureMiddlewareServices(IServiceCollection services)
         {            
-            services.AddMvc();
-            
-            String migrationsAssembly = typeof(AuthenticationDbContext).GetTypeInfo().Assembly.GetName().Name;
-
-            services.AddDbContext<ConfigurationDbContext>(builder =>
-                    builder.UseMySql(ConfigurationConnectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
-                .AddTransient<ConfigurationDbContext>();
-
-            services.AddDbContext<PersistedGrantDbContext>(builder =>
-                    builder.UseMySql(PersistedGrantStoreConenctionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
-                .AddTransient<PersistedGrantDbContext>();
-
-            services.AddDbContext<AuthenticationDbContext>(builder =>
-                    builder.UseMySql(AuthenticationConenctionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
-                .AddTransient<AuthenticationDbContext>();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);;
             
             services.AddIdentity<IdentityUser, IdentityRole>(o =>
             {
@@ -225,8 +213,7 @@ namespace OAuth2SecurityService.Service
                     Configuration.GetValue<Boolean>("IdentityOptions:PasswordOptions:RequireNonAlphanumeric");
                 o.Password.RequiredLength = Configuration.GetValue<Int32>("IdentityOptions:PasswordOptions:RequiredLength");
             }).AddEntityFrameworkStores<AuthenticationDbContext>().AddDefaultTokenProviders();
-
-            //Logger.LogDebug(HostingEnvironment.EnvironmentName);
+            
             if (HostingEnvironment.IsEnvironment("IntegrationTest"))
             {
                 services.AddIdentityServer(options =>
@@ -239,7 +226,19 @@ namespace OAuth2SecurityService.Service
                     .AddDeveloperSigningCredential()
                     .AddAspNetIdentity<IdentityUser>()
                     .AddJwtBearerClientAuthentication()
-                    .AddIntegrationTestConfiguration();
+                    .AddIntegrationTestConfiguration();                  
+
+                services.AddDbContext<AuthenticationDbContext>(builder =>
+                        builder.UseInMemoryDatabase("Authentication"))
+                    .AddTransient<AuthenticationDbContext>();
+
+                services.AddDbContext<ConfigurationDbContext>(builder =>
+                        builder.UseInMemoryDatabase("Configuration"))
+                    .AddTransient<ConfigurationDbContext>();
+
+                services.AddDbContext<PersistedGrantDbContext>(builder =>
+                        builder.UseInMemoryDatabase("PersistedGrantStore"))
+                    .AddTransient<PersistedGrantDbContext>();
             }
             else
             {
@@ -256,6 +255,20 @@ namespace OAuth2SecurityService.Service
                     .AddIdentityServerStorage(ConfigurationConnectionString)
                     .AddAspNetIdentity<IdentityUser>()
                     .AddJwtBearerClientAuthentication();
+
+                String migrationsAssembly = typeof(AuthenticationDbContext).GetTypeInfo().Assembly.GetName().Name;
+
+                services.AddDbContext<ConfigurationDbContext>(builder =>
+                        builder.UseMySql(ConfigurationConnectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
+                    .AddTransient<ConfigurationDbContext>();
+
+                services.AddDbContext<PersistedGrantDbContext>(builder =>
+                        builder.UseMySql(PersistedGrantStoreConenctionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
+                    .AddTransient<PersistedGrantDbContext>();
+
+                services.AddDbContext<AuthenticationDbContext>(builder =>
+                        builder.UseMySql(AuthenticationConenctionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
+                    .AddTransient<AuthenticationDbContext>();
             }
             services.AddCors();
             
@@ -285,6 +298,8 @@ namespace OAuth2SecurityService.Service
         /// <param name="services">The services.</param>
         private static void ConfigureCommonServices(IServiceCollection services)
         {
+            services.AddSingleton<ISecurityServiceManager, SecurityServiceManager>();
+            services.AddSingleton<IPasswordHasher<IdentityUser>, PasswordHasher<IdentityUser>>();
         }
         #endregion
 
