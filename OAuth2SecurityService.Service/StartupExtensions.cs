@@ -91,19 +91,7 @@ namespace OAuth2SecurityService.Service
         public static IIdentityServerBuilder AddIntegrationTestConfiguration(this IIdentityServerBuilder builder)
         {
             builder.AddInMemoryClients(ClientSeedData.GetClients(SeedingType.IntegrationTest));
-            builder.AddInMemoryApiResources(ApiResourceSeedData.GetApiResources(SeedingType.IntegrationTest));
-            //List<TestUser> testUsers = new List<TestUser>();
-            //testUsers.Add(new TestUser
-            //{
-            //    Claims = null,
-            //    IsActive = true,
-            //    Password = "123456",
-            //    ProviderName = String.Empty,
-            //    ProviderSubjectId = "84DC3E90-16B9-441D-B940-37BAA2AC53AF",
-            //    SubjectId = "84DC3E90-16B9-441D-B940-37BAA2AC53AF",
-            //    Username = "integrationtest@test.co.uk"
-            //});
-            //builder.AddTestUsers(testUsers);
+            builder.AddInMemoryApiResources(ApiResourceSeedData.GetApiResources(SeedingType.IntegrationTest));            
             builder.AddInMemoryUsers(IdentityUserSeedData.GetIdentityUsers(SeedingType.IntegrationTest));
             builder.AddInMemoryPersistedGrants();
 
