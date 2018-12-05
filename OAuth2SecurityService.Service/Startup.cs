@@ -242,20 +242,6 @@ namespace OAuth2SecurityService.Service
             }
             else
             {
-                services.AddIdentityServer(options =>
-                        {
-                            options.Events.RaiseSuccessEvents = true;
-                            options.Events.RaiseFailureEvents = true;
-                            options.Events.RaiseErrorEvents = true;
-                            options.PublicOrigin = Configuration.GetValue<String>("PublicOrigin");
-                        })
-                    .AddConfigurationStore()
-                    .AddOperationalStore()
-                    .AddDeveloperSigningCredential()
-                    .AddIdentityServerStorage(ConfigurationConnectionString)
-                    .AddAspNetIdentity<IdentityUser>()
-                    .AddJwtBearerClientAuthentication();
-
                 String migrationsAssembly = typeof(AuthenticationDbContext).GetTypeInfo().Assembly.GetName().Name;
 
                 services.AddDbContext<ConfigurationDbContext>(builder =>
@@ -269,6 +255,20 @@ namespace OAuth2SecurityService.Service
                 services.AddDbContext<AuthenticationDbContext>(builder =>
                         builder.UseMySql(AuthenticationConenctionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
                     .AddTransient<AuthenticationDbContext>();
+
+                services.AddIdentityServer(options =>
+                        {
+                            options.Events.RaiseSuccessEvents = true;
+                            options.Events.RaiseFailureEvents = true;
+                            options.Events.RaiseErrorEvents = true;
+                            options.PublicOrigin = Configuration.GetValue<String>("PublicOrigin");
+                        })
+                    .AddConfigurationStore()
+                    .AddOperationalStore()
+                    .AddDeveloperSigningCredential()
+                    .AddIdentityServerStorage(ConfigurationConnectionString)
+                    .AddAspNetIdentity<IdentityUser>()
+                    .AddJwtBearerClientAuthentication();                
             }
             services.AddCors();
             

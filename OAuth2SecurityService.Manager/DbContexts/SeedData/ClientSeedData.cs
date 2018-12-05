@@ -20,11 +20,14 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
         {
             List<Client> clients = new List<Client>();
                        
-            // Golf Handicapping Admin Web Application Client
-            //clients.Add(CreateGolfHandicappingAdminApplicationClient(seedingType));
-
             // Developer Client
             clients.Add(CreateDeveloperClient(seedingType));
+
+            // Mobile Client
+            clients.Add(CreateMobileAppClient(seedingType));
+
+            // Web Client
+            clients.Add(CreateWebAppClient(seedingType));
             
             return clients;
         }
@@ -79,33 +82,93 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
         }
         #endregion
 
-        #region private static Client CreateGolfHandicappingAdminApplicationClient(SeedingType seedingType)        
+        #region private static Client CreateMobileAppClient(SeedingType seedingType)        
         /// <summary>
-        /// Creates the admin application client.
+        /// Creates the mobile application client.
         /// </summary>
         /// <param name="seedingType">Type of the seeding.</param>
         /// <returns></returns>
-        private static Client CreateGolfHandicappingAdminApplicationClient(SeedingType seedingType)
+        private static Client CreateMobileAppClient(SeedingType seedingType)
         {
-            Client client = new Client();
+            Client client = null;
 
+            // Setup the scopes
             List<String> scopes = new List<String>();
-            scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Where(r => r.Name ==  "managementApi").Select(y => y.Name).ToList());
+            scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType)
+                .Where(a => a.Name == "managementapi.player.read" ||
+                            a.Name == "managementapi.player.write" ||
+                            a.Name == "managementapi.player.reports").Select(y => y.Name).ToList());
 
-            if (seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
+            if (seedingType == SeedingType.IntegrationTest)
             {
                 client = new Client
                 {
-                    ClientId = "golfhandicappingAdminApplicationClient",
-                    ClientName = "Golf Handicapping Admin Application Client",
-                    ClientSecrets = {new Secret("golfhandicappingAdminApplicationClient".Sha256())},
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    ClientId = "integrationTestMobileClient",
+                    ClientName = "Integration Test Mobile Client",
+                    ClientSecrets = {new Secret("integrationTestMobileClient".Sha256())},
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
+                    AllowedScopes = scopes,                    
+                };
+            }
+            else if (seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
+            {
+                client = new Client
+                {
+                    ClientId = "golfhandicap.mobile",
+                    ClientName = "Mobile App Client",
+                    ClientSecrets = {new Secret("golfhandicap.mobile".Sha256())},
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     AllowedScopes = scopes
                 };
             }
             else if (seedingType == SeedingType.Production)
             {
-                // TODO:
+                // TODO
+            }
+
+            return client;
+        }
+        #endregion
+
+        #region private static Client CreateWebAppClient(SeedingType seedingType)        
+        /// <summary>
+        /// Creates the web application client.
+        /// </summary>
+        /// <param name="seedingType">Type of the seeding.</param>
+        /// <returns></returns>
+        private static Client CreateWebAppClient(SeedingType seedingType)
+        {
+            Client client = null;
+
+            // Setup the scopes
+            List<String> scopes = new List<String>();
+            scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Select(y => y.Name).ToList());
+
+            if (seedingType == SeedingType.IntegrationTest)
+            {
+                client = new Client
+                {
+                    ClientId = "integrationTestWebClient",
+                    ClientName = "Integration Test Web Client",
+                    ClientSecrets = {new Secret("integrationTestWebClient".Sha256())},
+                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+                    AllowedScopes = scopes,                    
+                };
+            }
+            else if (seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
+            {
+                client = new Client
+                {
+                    ClientId = "golfhandicap.web",
+                    ClientName = "Web App Client",
+                    ClientSecrets = {new Secret("golfhandicap.web".Sha256())},
+                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+                    AllowedScopes = scopes
+                };
+            }
+            else if (seedingType == SeedingType.Production)
+            {
+                // TODO
             }
 
             return client;
