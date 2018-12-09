@@ -10,6 +10,7 @@ using Moq;
 using OAuth2SecurityService.DataTransferObjects;
 using OAuth2SecurityService.Manager;
 using OAuth2SecurityService.Manager.Exceptions;
+using OAuth2SecurityService.Manager.Services;
 using Shouldly;
 using Xunit;
 
@@ -23,11 +24,13 @@ namespace OAuth2SecurityService.UnitTests
             Mock<IPasswordHasher<IdentityUser>> passwordHasher = new Mock<IPasswordHasher<IdentityUser>>();
             Mock<IUserStore<IdentityUser>> userStore = new Mock<IUserStore<IdentityUser>>();
             UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(userStore.Object, null, null, null, null,null, null, null, null);
+            Mock<IMessagingService> messagingService = new Mock<IMessagingService>();
+
             //Mock<IRoleStore<IdentityRole>> roleStore = new Mock<IRoleStore<IdentityRole>>();
             //RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(roleStore.Object, null, null, null, null);
             //Mock<Func<IConfigurationDbContext>> configurationDbContext = new Mock<Func<IConfigurationDbContext>>();
 
-            SecurityServiceManager securityServiceManager = new SecurityServiceManager(passwordHasher.Object, userManager);
+            SecurityServiceManager securityServiceManager = new SecurityServiceManager(passwordHasher.Object, userManager, messagingService.Object);
 
             securityServiceManager.ShouldNotBeNull();
         }

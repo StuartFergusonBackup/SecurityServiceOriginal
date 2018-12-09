@@ -40,8 +40,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ductus.FluentDocker, Version=2.6.3.0, Culture=neutral, PublicKeyToken=961e8a38a128a442, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ductus.FluentDocker.2.6.3\lib\net452\Ductus.FluentDocker.dll</HintPath>
+    <Reference Include="Ductus.FluentDocker, Version=2.6.4.0, Culture=neutral, PublicKeyToken=961e8a38a128a442, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ductus.FluentDocker.2.6.4\lib\net452\Ductus.FluentDocker.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Protobuf.3.6.1\lib\net45\Google.Protobuf.dll</HintPath>
