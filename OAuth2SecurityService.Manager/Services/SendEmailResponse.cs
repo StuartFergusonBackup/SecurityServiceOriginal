@@ -44,6 +44,5 @@ namespace OAuth2SecurityService.Manager.Services
         /// The error.
         /// </value>
         public String Error { get; set; }
-
     }
 }
