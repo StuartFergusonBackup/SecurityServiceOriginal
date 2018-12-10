@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using MockQueryable.Moq;
 using Moq;
 using OAuth2SecurityService.Manager;
+using OAuth2SecurityService.Manager.Services;
 
 namespace OAuth2SecurityService.UnitTests
 {
@@ -519,11 +520,14 @@ namespace OAuth2SecurityService.UnitTests
             //{
             //    PublicOrigin = "http://localhost"
             //});
+            Mock<IMessagingService> messagingService = new Mock<IMessagingService>();
 
             //SecurityServiceManager securityServiceManager =
             //    new SecurityServiceManager(this.PasswordHasher.Object, userManager, roleManager, configurationDbContextResolver.Object, EmailService.Object, serviceOptions.Object);
+            
             SecurityServiceManager securityServiceManager =
-                new SecurityServiceManager(this.PasswordHasher.Object, userManager);
+                new SecurityServiceManager(this.PasswordHasher.Object, userManager, messagingService.Object);
+
             return securityServiceManager;
         }
 

@@ -19,6 +19,7 @@ using NLog.Extensions.Logging;
 using OAuth2SecurityService.Manager;
 using OAuth2SecurityService.Manager.DbContexts;
 using OAuth2SecurityService.Manager.DbContexts.SeedData;
+using OAuth2SecurityService.Manager.Services;
 using Shared.General;
 using StructureMap;
 using Swashbuckle.AspNetCore.Swagger;
@@ -116,6 +117,8 @@ namespace OAuth2SecurityService.Service
             
             Logger.Initialise(logger);
  
+            ConfigurationReader.Initialise(Startup.Configuration);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -300,6 +303,7 @@ namespace OAuth2SecurityService.Service
         {
             services.AddSingleton<ISecurityServiceManager, SecurityServiceManager>();
             services.AddSingleton<IPasswordHasher<IdentityUser>, PasswordHasher<IdentityUser>>();
+            services.AddSingleton<IMessagingService, MessagingService>();
         }
         #endregion
 

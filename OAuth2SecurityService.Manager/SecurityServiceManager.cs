@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using OAuth2SecurityService.DataTransferObjects;
 using OAuth2SecurityService.Manager.Exceptions;
+using OAuth2SecurityService.Manager.Services;
 using Shared.General;
 
 namespace OAuth2SecurityService.Manager
@@ -25,18 +27,26 @@ namespace OAuth2SecurityService.Manager
         /// </summary>
         private readonly UserManager<IdentityUser> UserManager;
 
+        /// <summary>
+        /// The messaging service
+        /// </summary>
+        private readonly IMessagingService MessagingService;
+
         #endregion
 
         #region Constructor        
         /// <summary>
-        /// Initializes a new instance of the <see cref="SecurityServiceManager"/> class.
+        /// Initializes a new instance of the <see cref="SecurityServiceManager" /> class.
         /// </summary>
         /// <param name="passwordHasher">The password hasher.</param>
         /// <param name="userManager">The user manager.</param>
-        public SecurityServiceManager(IPasswordHasher<IdentityUser> passwordHasher, UserManager<IdentityUser> userManager)
+        /// <param name="messagingService">The messaging service.</param>
+        public SecurityServiceManager(IPasswordHasher<IdentityUser> passwordHasher, UserManager<IdentityUser> userManager,
+            IMessagingService messagingService)
         {
             this.PasswordHasher = passwordHasher;
             this.UserManager = userManager;
+            this.MessagingService = messagingService;
         }
         #endregion
 
@@ -109,31 +119,40 @@ namespace OAuth2SecurityService.Manager
 
                 if (!addRolesResult.Succeeded)
                 {
-                    throw new IdentityResultException($"Error adding roles [{String.Join(",", request.Roles)}] to user {newIdentityUser.UserName}", addRolesResult);
+                    throw new IdentityResultException(
+                        $"Error adding roles [{String.Join(",", request.Roles)}] to user {newIdentityUser.UserName}",
+                        addRolesResult);
                 }
 
                 // Add the requested claims
                 var claims = request.Claims.Select(x => new Claim(x.Key, x.Value)).ToList();
                 addClaimsResult = await this.UserManager.AddClaimsAsync(newIdentityUser, claims);
-                
+
                 if (!addClaimsResult.Succeeded)
                 {
                     List<String> claimList = new List<String>();
                     claims.ForEach(c => claimList.Add($"Name: {c.Type} Value: {c.Value}"));
-                    throw new IdentityResultException($"Error adding claims [{String.Join(",", claims)}] to user {newIdentityUser.UserName}", addClaimsResult);
+                    throw new IdentityResultException(
+                        $"Error adding claims [{String.Join(",", claims)}] to user {newIdentityUser.UserName}",
+                        addClaimsResult);
                 }
+
+                // Send the Registration Email
+                await this.SendRegistrationEmail(newIdentityUser.Email, request.Password, cancellationToken);
             }
             finally
             {
                 // Do some cleanup here (if the create was successful but one fo the other steps failed)
-                if ((createResult == IdentityResult.Success) && (!addRolesResult.Succeeded || !addClaimsResult.Succeeded))
+                if ((createResult == IdentityResult.Success) &&
+                    (!addRolesResult.Succeeded || !addClaimsResult.Succeeded))
                 {
                     // User has been created so need to remove this
                     var deleteResult = await this.UserManager.DeleteAsync(newIdentityUser);
 
                     if (!deleteResult.Succeeded)
                     {
-                        throw new IdentityResultException($"Error deleting user {newIdentityUser.UserName} as part of cleanup", deleteResult);
+                        throw new IdentityResultException(
+                            $"Error deleting user {newIdentityUser.UserName} as part of cleanup", deleteResult);
                     }
                 }
             }
@@ -145,7 +164,7 @@ namespace OAuth2SecurityService.Manager
             };
 
             return response;
-        }
+        }        
 
         #endregion
 
@@ -166,6 +185,45 @@ namespace OAuth2SecurityService.Manager
             Guard.ThrowIfNullOrEmpty(request.PhoneNumber, typeof(ArgumentNullException), "RegisterUserRequest Phone Number cannot be null or empty");
             Guard.ThrowIfNull(request.Claims, typeof(ArgumentNullException), "RegisterUserRequest Claims cannot be null or empty");            
             Guard.ThrowIfNull(request.Roles, typeof(ArgumentNullException), "RegisterUserRequest Roles cannot be null or empty");
+        }
+        #endregion
+
+        #region private async Task SendRegistrationEmail(String email, String requestPassword)        
+        /// <summary>
+        /// Sends the registration email.
+        /// </summary>
+        /// <param name="emailAddress">The email address.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        private async Task SendRegistrationEmail(String emailAddress, String password, CancellationToken cancellationToken)
+        {
+            StringBuilder emailBuilder = new StringBuilder();
+            emailBuilder.AppendLine("<html><body>");
+            emailBuilder.AppendLine("<p>Welcome to mygolfhandicapping.co.uk</p>");
+            emailBuilder.AppendLine("<p></p>");
+            emailBuilder.AppendLine("<p>Please find below your user details:</p>");
+            emailBuilder.AppendLine("<table>");
+            emailBuilder.AppendLine("<tr><td><strong>User Name</strong></td></tr>");
+            emailBuilder.AppendLine($"<tr><td>{emailAddress}</td></tr>");
+            emailBuilder.AppendLine("<tr><td><strong>Password</strong></td></tr>");
+            emailBuilder.AppendLine($"<tr><td>{password}</td></tr>");
+            emailBuilder.AppendLine("</table>");
+            emailBuilder.AppendLine("</body></html>");
+
+            SendEmailRequest sendEmailRequest = new SendEmailRequest
+            {
+                Body = emailBuilder.ToString(),
+                FromAddress = "golfhandicapping@btinternet.com",
+                IsHtml = true,
+                Subject = "mygolfhandicapping.co.uk Registration Completed",
+                ToAddresses = new List<String> {emailAddress}
+            };
+
+            SendEmailResponse response = await this.MessagingService.SendEmail(sendEmailRequest, cancellationToken);
+
+            // TODO: Handle a failure case here
         }
         #endregion
 
