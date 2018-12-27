@@ -54,7 +54,11 @@ namespace OAuth2SecurityService.UnitTests
             ResetPasswordSuccess,
             ResetPasswordInvalidData,
             ResetPasswordInvalidEmailAddress,
-            ResetPasswordInvalidPasswordResetCode
+            ResetPasswordInvalidPasswordResetCode,
+            CreateRoleSuccess,
+            CreateRoleInvalidData,
+            CreateRoleDuplicateRoleName,
+            CreateRoleCreateRoleFailed
         }
 
         private void SetupPasswordHasher(TestScenario testScenario)
@@ -409,9 +413,21 @@ namespace OAuth2SecurityService.UnitTests
 
         private void SetupRoleStore(TestScenario testScenario)
         {
-            if (testScenario == TestScenario.ChangePasswordSuccess || testScenario == TestScenario.ResetPasswordSuccess)
+            if (testScenario == TestScenario.CreateRoleSuccess)
             {
-                // Nothing required here    
+                this.RoleStore.Setup(r => r.CreateAsync(It.IsAny<IdentityRole>(), CancellationToken.None))
+                    .ReturnsAsync(IdentityResult.Success);
+            }
+            else if (testScenario == TestScenario.CreateRoleCreateRoleFailed)
+            {
+                this.RoleStore.Setup(r => r.CreateAsync(It.IsAny<IdentityRole>(), CancellationToken.None))
+                    .ReturnsAsync(IdentityResult.Failed());
+            }
+            else if (testScenario == TestScenario.CreateRoleDuplicateRoleName)
+            {
+                IdentityRole roleFound = new IdentityRole("testrole");
+                this.RoleStore.Setup(r => r.FindByNameAsync(It.IsAny<String>(), CancellationToken.None))
+                    .ReturnsAsync(roleFound);
             }
         }
 
@@ -526,7 +542,7 @@ namespace OAuth2SecurityService.UnitTests
             //    new SecurityServiceManager(this.PasswordHasher.Object, userManager, roleManager, configurationDbContextResolver.Object, EmailService.Object, serviceOptions.Object);
             
             SecurityServiceManager securityServiceManager =
-                new SecurityServiceManager(this.PasswordHasher.Object, userManager, messagingService.Object);
+                new SecurityServiceManager(this.PasswordHasher.Object, userManager, messagingService.Object, roleManager);
 
             return securityServiceManager;
         }

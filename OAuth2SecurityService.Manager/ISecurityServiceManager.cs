@@ -14,5 +14,13 @@ namespace OAuth2SecurityService.Manager
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         Task<RegisterUserResponse> RegisterUser(RegisterUserRequest request, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Creates the role.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<CreateRoleResponse> CreateRole(CreateRoleRequest request, CancellationToken cancellationToken);
     }
 }
