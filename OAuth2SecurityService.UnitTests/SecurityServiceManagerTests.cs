@@ -7,6 +7,7 @@ using IdentityServer4.EntityFramework.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Moq;
+using NLog.Web.LayoutRenderers;
 using OAuth2SecurityService.DataTransferObjects;
 using OAuth2SecurityService.Manager;
 using OAuth2SecurityService.Manager.Exceptions;
@@ -25,12 +26,11 @@ namespace OAuth2SecurityService.UnitTests
             Mock<IUserStore<IdentityUser>> userStore = new Mock<IUserStore<IdentityUser>>();
             UserManager<IdentityUser> userManager = new UserManager<IdentityUser>(userStore.Object, null, null, null, null,null, null, null, null);
             Mock<IMessagingService> messagingService = new Mock<IMessagingService>();
-
-            //Mock<IRoleStore<IdentityRole>> roleStore = new Mock<IRoleStore<IdentityRole>>();
-            //RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(roleStore.Object, null, null, null, null);
+            Mock<IRoleStore<IdentityRole>> roleStore = new Mock<IRoleStore<IdentityRole>>();
+            RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(roleStore.Object, null, null, null, null);
             //Mock<Func<IConfigurationDbContext>> configurationDbContext = new Mock<Func<IConfigurationDbContext>>();
 
-            SecurityServiceManager securityServiceManager = new SecurityServiceManager(passwordHasher.Object, userManager, messagingService.Object);
+            SecurityServiceManager securityServiceManager = new SecurityServiceManager(passwordHasher.Object, userManager, messagingService.Object, roleManager);
 
             securityServiceManager.ShouldNotBeNull();
         }
@@ -102,6 +102,69 @@ namespace OAuth2SecurityService.UnitTests
             {                
                 await securityServiceManager.RegisterUser(request, CancellationToken.None);
             },exceptionType);
+        }
+
+        #endregion
+
+        #region Create Role Tests
+
+        [Fact]
+        public async Task SecurityServiceManager_CreateRole_RoleIsCreated()
+        {
+            TestScenario testScenario = TestScenario.CreateRoleSuccess;
+            SecurityServiceManager securityServiceManager = SetupSecurityServiceManager(testScenario);
+            
+            CreateRoleRequest request = SecurityServiceManagerTestData.GetCreateRoleRequest;
+
+            var response = await securityServiceManager.CreateRole(request, CancellationToken.None);
+
+            response.ShouldNotBeNull();
+            response.RoleId.ShouldNotBe(Guid.Empty);
+        }
+        
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        public void SecurityServiceManager_CreateRole_InvalidData_ErrorThrown(String roleName)
+        {
+            TestScenario testScenario = TestScenario.CreateRoleInvalidData;
+            SecurityServiceManager securityServiceManager = SetupSecurityServiceManager(testScenario);
+            
+            CreateRoleRequest request = SecurityServiceManagerTestData.GetCreateRoleRequest;
+            request.RoleName = roleName;
+
+            Should.Throw<ArgumentNullException>(async () =>
+            {
+                await securityServiceManager.CreateRole(request, CancellationToken.None);
+            });
+        }
+
+        [Fact]
+        public async Task SecurityServiceManager_CreateRole_DuplicateRole_ErrorThrown()
+        {
+            TestScenario testScenario = TestScenario.CreateRoleDuplicateRoleName;
+            SecurityServiceManager securityServiceManager = SetupSecurityServiceManager(testScenario);
+            
+            CreateRoleRequest request = SecurityServiceManagerTestData.GetCreateRoleRequest;
+
+            Should.Throw<IdentityResultException>(async () =>
+            {
+                await securityServiceManager.CreateRole(request, CancellationToken.None);
+            });
+        }
+
+        [Fact]
+        public void SecurityServiceManager_CreateRole_CreateRoleFailed_ErrorThrown()
+        {
+            TestScenario testScenario = TestScenario.CreateRoleCreateRoleFailed;
+            SecurityServiceManager securityServiceManager = SetupSecurityServiceManager(testScenario);
+            
+            CreateRoleRequest request = SecurityServiceManagerTestData.GetCreateRoleRequest;
+
+            Should.Throw<IdentityResultException>(async () =>
+            {
+                await securityServiceManager.CreateRole(request, CancellationToken.None);
+            });
         }
 
         #endregion

@@ -129,6 +129,12 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\UserTokenReponse.cs" />
+    <Compile Include="Role\CreateRole.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CreateRole.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Role\RoleSteps.cs" />
     <Compile Include="User\RegisterUser.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -148,6 +154,10 @@
     </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Role\CreateRole.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CreateRole.feature.cs</LastGenOutput>
     </None>
     <None Include="User\RegisterUser.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

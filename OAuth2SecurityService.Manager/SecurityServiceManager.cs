@@ -32,6 +32,11 @@ namespace OAuth2SecurityService.Manager
         /// </summary>
         private readonly IMessagingService MessagingService;
 
+        /// <summary>
+        /// The role manager
+        /// </summary>
+        private readonly RoleManager<IdentityRole> RoleManager;
+
         #endregion
 
         #region Constructor        
@@ -41,12 +46,14 @@ namespace OAuth2SecurityService.Manager
         /// <param name="passwordHasher">The password hasher.</param>
         /// <param name="userManager">The user manager.</param>
         /// <param name="messagingService">The messaging service.</param>
+        /// <param name="roleManager">The role manager.</param>
         public SecurityServiceManager(IPasswordHasher<IdentityUser> passwordHasher, UserManager<IdentityUser> userManager,
-            IMessagingService messagingService)
+            IMessagingService messagingService, RoleManager<IdentityRole> roleManager)
         {
             this.PasswordHasher = passwordHasher;
             this.UserManager = userManager;
             this.MessagingService = messagingService;
+            this.RoleManager = roleManager;
         }
         #endregion
 
@@ -83,8 +90,8 @@ namespace OAuth2SecurityService.Manager
                 Email = request.EmailAddress,
                 EmailConfirmed = true,
                 UserName = request.EmailAddress,
-                NormalizedEmail = request.EmailAddress.ToLower(),
-                NormalizedUserName = request.EmailAddress.ToLower(),
+                NormalizedEmail = request.EmailAddress.ToUpper(),
+                NormalizedUserName = request.EmailAddress.ToUpper(),
                 SecurityStamp = Guid.NewGuid().ToString("D")
             };
 
@@ -168,6 +175,49 @@ namespace OAuth2SecurityService.Manager
 
         #endregion
 
+        #region public async Task<CreateRoleResponse> CreateRole(CreateRoleRequest request, CancellationToken cancellationToken)
+
+        public async Task<CreateRoleResponse> CreateRole(CreateRoleRequest request, CancellationToken cancellationToken)
+        {
+            // Validate the input request
+            this.ValidateRequest(request);
+
+            Guid roleId = Guid.NewGuid();
+
+            IdentityRole newIdentityRole = new IdentityRole
+            {
+                Id = roleId.ToString(),
+                Name = request.RoleName,
+                NormalizedName = request.RoleName.ToUpper()
+            };
+
+            // Default all IdentityResults to failed
+            IdentityResult createResult = IdentityResult.Failed();
+            
+            // Ensure role name is not a duplicate
+            if (await this.RoleManager.RoleExistsAsync(newIdentityRole.Name))
+            {
+                throw new IdentityResultException($"Role {newIdentityRole.Name} already exists", IdentityResult.Failed());
+            }
+
+            createResult = await this.RoleManager.CreateAsync(newIdentityRole);
+
+            if (!createResult.Succeeded)
+            {
+                throw new IdentityResultException($"Error creating role {newIdentityRole.Name}", createResult);
+            }
+
+            // Create the response
+            CreateRoleResponse response = new CreateRoleResponse
+            {
+                RoleId = roleId
+            };
+
+            return response;
+            
+        }
+        #endregion
+
         #endregion
 
         #region Private Methods
@@ -187,6 +237,20 @@ namespace OAuth2SecurityService.Manager
             Guard.ThrowIfNull(request.Roles, typeof(ArgumentNullException), "RegisterUserRequest Roles cannot be null or empty");
         }
         #endregion
+
+        #region private void ValidateRequest(CreateRoleRequest request)        
+        /// <summary>
+        /// Validates the request.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <exception cref="System.NotImplementedException"></exception>
+        private void ValidateRequest(CreateRoleRequest request)
+        {
+            Guard.ThrowIfNull(request, typeof(ArgumentNullException), "RegisterUserRequest cannot be null");
+            Guard.ThrowIfNullOrEmpty(request.RoleName, typeof(ArgumentNullException), "RegisterUserRequest Role Name cannot be null or empty");
+        }
+        #endregion
+
 
         #region private async Task SendRegistrationEmail(String email, String requestPassword)        
         /// <summary>

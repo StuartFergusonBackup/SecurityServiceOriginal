@@ -31,5 +31,17 @@ namespace OAuth2SecurityService.IntegrationTests.Specflow.Common
                 return request;
             }
         }
+
+        public static CreateRoleRequest GetCreateRoleRequest
+        {
+            get
+            {
+                CreateRoleRequest request = new CreateRoleRequest();
+
+                request.RoleName = "Test Role";
+
+                return request;
+            }
+        }
     }
 }
