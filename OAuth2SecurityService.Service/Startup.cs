@@ -224,7 +224,8 @@ namespace OAuth2SecurityService.Service
                         options.Events.RaiseSuccessEvents = true;
                         options.Events.RaiseFailureEvents = true;
                         options.Events.RaiseErrorEvents = true;
-                        options.PublicOrigin = Configuration.GetValue<String>("PublicOrigin");
+                        options.PublicOrigin = Configuration.GetValue<String>("ServiceOptions:PublicOrigin");
+                        options.IssuerUri = Configuration.GetValue<String>("ServiceOptions:PublicOrigin");
                     })
                     .AddDeveloperSigningCredential()
                     .AddAspNetIdentity<IdentityUser>()
@@ -264,7 +265,8 @@ namespace OAuth2SecurityService.Service
                             options.Events.RaiseSuccessEvents = true;
                             options.Events.RaiseFailureEvents = true;
                             options.Events.RaiseErrorEvents = true;
-                            options.PublicOrigin = Configuration.GetValue<String>("PublicOrigin");
+                            options.PublicOrigin = Configuration.GetValue<String>("ServiceOptions:PublicOrigin");
+                            options.IssuerUri = Configuration.GetValue<String>("ServiceOptions:PublicOrigin");
                         })
                     .AddConfigurationStore()
                     .AddOperationalStore()

@@ -14,17 +14,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
         {
             List<ApiResource> apiResources = new List<ApiResource>();
                
-            apiResources.Add(new ApiResource("managementapi.player.read"));
-            apiResources.Add(new ApiResource("managementapi.player.write"));
-            apiResources.Add(new ApiResource("managementapi.player.reports"));
-
-            apiResources.Add(new ApiResource("managementapi.club.read"));
-            apiResources.Add(new ApiResource("managementapi.club.write"));
-            apiResources.Add(new ApiResource("managementapi.club.reports"));
-
-            apiResources.Add(new ApiResource("managementapi.tournament.read"));
-            apiResources.Add(new ApiResource("managementapi.tournament.write"));
-            apiResources.Add(new ApiResource("managementapi.tournament.reports"));            
+            apiResources.Add(new ApiResource("managementapi"));                      
             
             return apiResources;
         }
