@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OAuth2SecurityService.Manager.DbContexts.SeedData;
 
@@ -33,8 +34,10 @@ namespace OAuth2SecurityService.Manager.DbContexts
 
                 AddClients(configurationDbContext, seedingType);
                 AddApiResources(configurationDbContext, seedingType);
+                AddRoles(authenticationDbContext, seedingType);
                 AddUsers(authenticationDbContext, seedingType);
-
+                AddUsersToRoles(authenticationDbContext, seedingType);
+                
                 configurationDbContext.SaveChanges();
                 persistedGrantDbContext.SaveChanges();
                 authenticationDbContext.SaveChanges();
@@ -89,6 +92,36 @@ namespace OAuth2SecurityService.Manager.DbContexts
                 if (!foundUser)
                 {
                     context.Users.Add(identityUser);
+                }
+            }
+        }
+
+        private static void AddRoles(AuthenticationDbContext context, SeedingType seedingType)
+        {
+            var roles = RoleSeedData.GetIdentityRoles(seedingType);
+
+            foreach (var role in roles)
+            {
+                var foundRole = context.Roles.Any(a => a.Name== role.Name);
+
+                if (!foundRole)
+                {
+                    context.Roles.Add(role);
+                }
+            }
+        }
+
+        private static void AddUsersToRoles(AuthenticationDbContext context, SeedingType seedingType)
+        {
+            var identityUserRoles = IdentityUserRoleSeedData.GetIdentityUserRoles(seedingType);
+
+            foreach (var identityUserRole in identityUserRoles)
+            {
+                var foundUserRole = context.UserRoles.Any(a => a.RoleId== identityUserRole.RoleId && a.UserId == identityUserRole.UserId);
+
+                if (!foundUserRole)
+                {
+                    context.UserRoles.Add(identityUserRole);
                 }
             }
         }
