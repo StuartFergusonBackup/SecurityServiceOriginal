@@ -93,6 +93,9 @@ namespace OAuth2SecurityService.Service
             builder.AddInMemoryClients(ClientSeedData.GetClients(SeedingType.IntegrationTest));
             builder.AddInMemoryApiResources(ApiResourceSeedData.GetApiResources(SeedingType.IntegrationTest));            
             builder.AddInMemoryUsers(IdentityUserSeedData.GetIdentityUsers(SeedingType.IntegrationTest));
+            builder.AddInMemoryRoles(RoleSeedData.GetIdentityRoles(SeedingType.IntegrationTest));
+            builder.AddInMemoryUserRoles(IdentityUserRoleSeedData.GetIdentityUserRoles(SeedingType.IntegrationTest));
+            
             builder.AddInMemoryPersistedGrants();
 
             return builder;
@@ -103,6 +106,20 @@ namespace OAuth2SecurityService.Service
             builder.Services.AddSingleton(users);
 
             builder.Services.AddSingleton<IUserStore<IdentityUser>, InMemoryUserStore>();            
+
+            return builder;
+        }
+
+        public static IIdentityServerBuilder AddInMemoryRoles(this IIdentityServerBuilder builder, IEnumerable<IdentityRole> roles)
+        {
+            builder.Services.AddSingleton(roles);   
+
+            return builder;
+        }
+
+        public static IIdentityServerBuilder AddInMemoryUserRoles(this IIdentityServerBuilder builder, IEnumerable<IdentityUserRole<String>> userRoles)
+        {
+            builder.Services.AddSingleton(userRoles);   
 
             return builder;
         }

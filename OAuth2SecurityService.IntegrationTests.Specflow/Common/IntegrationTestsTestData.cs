@@ -21,7 +21,10 @@ namespace OAuth2SecurityService.IntegrationTests.Specflow.Common
                 request.EmailAddress = "testemail1@testing.co.uk";
                 request.PhoneNumber = "07777777777";
                 request.PhoneNumber = "07777777777";
-                request.Roles = new List<String>();
+                request.Roles = new List<String>
+                {
+                    "Club Administrator"
+                };
                 request.Claims = new Dictionary<String, String>()
                 {
                     {"Claim1", "Claim1Value"},

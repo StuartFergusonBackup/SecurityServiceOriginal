@@ -156,7 +156,7 @@ namespace OAuth2SecurityService.Service
 
         public async Task AddToRoleAsync(IdentityUser user, String roleName, CancellationToken cancellationToken)
         {
-            var role = this.IdentityRoles.Where(r => r.Name == roleName).Single();
+            var role = this.IdentityRoles.Where(r => r.NormalizedName == roleName).Single();
 
             this.IdentityUserRoles.Add(new IdentityUserRole<String>{RoleId = role.Id, UserId = user.Id});
         }
@@ -174,7 +174,7 @@ namespace OAuth2SecurityService.Service
                 join identityUserRoles in this.IdentityUserRoles on identityRoles.Id equals identityUserRoles.RoleId
                 join identityUsers in this.IdentityUsers on identityUserRoles.UserId equals identityUsers.Id
                 where identityUsers.Id == user.Id
-                select identityRoles.Name).ToList();
+                select identityRoles.NormalizedName).ToList();
 
             return result;
 
@@ -186,7 +186,7 @@ namespace OAuth2SecurityService.Service
                 join identityUserRoles in this.IdentityUserRoles on identityRoles.Id equals identityUserRoles.RoleId
                 join identityUsers in this.IdentityUsers on identityUserRoles.UserId equals identityUsers.Id
                 where identityUsers.Id == user.Id
-                      && identityRoles.Name == roleName
+                      && identityRoles.NormalizedName == roleName
                 select identityRoles.Name).Any();
 
             return result;
@@ -197,7 +197,7 @@ namespace OAuth2SecurityService.Service
             var result = (from identityRoles in this.IdentityRoles
                 join identityUserRoles in this.IdentityUserRoles on identityRoles.Id equals identityUserRoles.RoleId
                 join identityUsers in this.IdentityUsers on identityUserRoles.UserId equals identityUsers.Id
-                where identityRoles.Name == roleName
+                where identityRoles.NormalizedName == roleName
                 select identityUsers).ToList();
 
             return result;
