@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using IdentityServer4.Models;
 using Client = IdentityServer4.Models.Client;
 using Secret = IdentityServer4.Models.Secret;
@@ -59,7 +60,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
                     ClientName = "Integration Test Client",
                     ClientSecrets = {new Secret("integrationTestClient".Sha256())},
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
-                    AllowedScopes = scopes,                    
+                    AllowedScopes = scopes
                 };
             }
             else if (seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
@@ -94,10 +95,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
 
             // Setup the scopes
             List<String> scopes = new List<String>();
-            scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType)
-                .Where(a => a.Name == "managementapi.player.read" ||
-                            a.Name == "managementapi.player.write" ||
-                            a.Name == "managementapi.player.reports").Select(y => y.Name).ToList());
+            scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Select(y => y.Name).ToList());
 
             if (seedingType == SeedingType.IntegrationTest)
             {

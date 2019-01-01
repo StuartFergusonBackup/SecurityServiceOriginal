@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using IdentityServer4.Models;
 
 namespace OAuth2SecurityService.Manager.DbContexts.SeedData
@@ -14,7 +15,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
         {
             List<ApiResource> apiResources = new List<ApiResource>();
                
-            apiResources.Add(new ApiResource("managementapi"));                      
+            apiResources.Add(new ApiResource("managementapi", new List<String> { "ClubId", "PlayerId", "role" } ));                      
             
             return apiResources;
         }
