@@ -51,12 +51,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
 
             // Setup the scopes
             List<String> scopes = new List<String>();
-            scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Select(y => y.Name).ToList());
-
-            // Add in the standard scopes for GetUserInfo
-            scopes.Add(IdentityServerConstants.StandardScopes.OpenId);
-            scopes.Add(IdentityServerConstants.StandardScopes.Profile);
-            scopes.Add(IdentityServerConstants.StandardScopes.Email);
+            scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Select(y => y.Name).ToList());            
 
             if (seedingType == SeedingType.IntegrationTest)
             {
@@ -71,6 +66,11 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
             }
             else if (seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
             {
+                // Add in the standard scopes for GetUserInfo
+                scopes.Add(IdentityServerConstants.StandardScopes.OpenId);
+                scopes.Add(IdentityServerConstants.StandardScopes.Profile);
+                scopes.Add(IdentityServerConstants.StandardScopes.Email);
+
                 client = new Client
                 {
                     ClientId = "developerClient",

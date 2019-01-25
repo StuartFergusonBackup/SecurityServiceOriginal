@@ -95,6 +95,7 @@ namespace OAuth2SecurityService.Service
             builder.AddInMemoryUsers(IdentityUserSeedData.GetIdentityUsers(SeedingType.IntegrationTest));
             builder.AddInMemoryRoles(RoleSeedData.GetIdentityRoles(SeedingType.IntegrationTest));
             builder.AddInMemoryUserRoles(IdentityUserRoleSeedData.GetIdentityUserRoles(SeedingType.IntegrationTest));
+            builder.AddInMemoryIdentityResources(IdentityResourceSeedData.GetIdentityResources(SeedingType.IntegrationTest));
             
             builder.AddInMemoryPersistedGrants();
 
