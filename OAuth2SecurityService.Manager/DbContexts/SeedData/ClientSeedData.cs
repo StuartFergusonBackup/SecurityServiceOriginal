@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using IdentityServer4;
 using IdentityServer4.Models;
 using Client = IdentityServer4.Models.Client;
 using Secret = IdentityServer4.Models.Secret;
@@ -52,6 +53,11 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
             List<String> scopes = new List<String>();
             scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Select(y => y.Name).ToList());
 
+            // Add in the standard scopes for GetUserInfo
+            scopes.Add(IdentityServerConstants.StandardScopes.OpenId);
+            scopes.Add(IdentityServerConstants.StandardScopes.Profile);
+            scopes.Add(IdentityServerConstants.StandardScopes.Email);
+
             if (seedingType == SeedingType.IntegrationTest)
             {
                 client = new Client
@@ -97,6 +103,11 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
             List<String> scopes = new List<String>();
             scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Select(y => y.Name).ToList());
 
+            // Add in the standard scopes for GetUserInfo
+            scopes.Add(IdentityServerConstants.StandardScopes.OpenId);
+            scopes.Add(IdentityServerConstants.StandardScopes.Profile);
+            scopes.Add(IdentityServerConstants.StandardScopes.Email);
+
             if (seedingType == SeedingType.IntegrationTest)
             {
                 client = new Client
@@ -141,6 +152,11 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
             // Setup the scopes
             List<String> scopes = new List<String>();
             scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Select(y => y.Name).ToList());
+            
+            // Add in the standard scopes for GetUserInfo
+            scopes.Add(IdentityServerConstants.StandardScopes.OpenId);
+            scopes.Add(IdentityServerConstants.StandardScopes.Profile);
+            scopes.Add(IdentityServerConstants.StandardScopes.Email);
 
             if (seedingType == SeedingType.IntegrationTest)
             {

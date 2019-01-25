@@ -37,7 +37,8 @@ namespace OAuth2SecurityService.Manager.DbContexts
                 AddRoles(authenticationDbContext, seedingType);
                 AddUsers(authenticationDbContext, seedingType);
                 AddUsersToRoles(authenticationDbContext, seedingType);
-                
+                AddIdentityResources(configurationDbContext, seedingType);
+
                 configurationDbContext.SaveChanges();
                 persistedGrantDbContext.SaveChanges();
                 authenticationDbContext.SaveChanges();
@@ -77,6 +78,21 @@ namespace OAuth2SecurityService.Manager.DbContexts
                 if (!foundResource)
                 {
                     context.ApiResources.Add(apiResource.ToEntity());
+                }
+            }
+        }
+
+        private static void AddIdentityResources(ConfigurationDbContext context, SeedingType seedingType)
+        {
+            var identityResources = IdentityResourceSeedData.GetIdentityResources(seedingType);
+
+            foreach (var identityResource in identityResources)
+            {
+                var foundResource = context.IdentityResources.Any(a => a.Name == identityResource.Name);
+
+                if (!foundResource)
+                {
+                    context.IdentityResources.Add(identityResource.ToEntity());
                 }
             }
         }

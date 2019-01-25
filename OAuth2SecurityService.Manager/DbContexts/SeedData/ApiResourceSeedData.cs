@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using IdentityServer4.Models;
+using Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal;
 
 namespace OAuth2SecurityService.Manager.DbContexts.SeedData
 {
@@ -15,7 +16,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
         {
             List<ApiResource> apiResources = new List<ApiResource>();
                
-            apiResources.Add(new ApiResource("managementapi", new List<String> { "ClubId", "PlayerId", "role" } ));                      
+            apiResources.Add(new ApiResource("managementapi", new List<String> { "GolfClubId", "PlayerId", "role" } ));                      
             
             return apiResources;
         }
