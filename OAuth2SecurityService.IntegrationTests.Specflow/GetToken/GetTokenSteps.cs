@@ -114,7 +114,6 @@ namespace OAuth2SecurityService.IntegrationTests.Specflow
             queryString.Append($"&client_secret={clientSecret}");
             queryString.Append($"&username={username}");
             queryString.Append($"&password={password}");
-            queryString.Append($"&scope=openid");
 
             HttpContent content = new StringContent(queryString.ToString(), Encoding.UTF8, "application/x-www-form-urlencoded");
 
