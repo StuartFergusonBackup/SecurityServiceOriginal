@@ -21,15 +21,14 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
         public static List<Client> GetClients(SeedingType seedingType)
         {
             List<Client> clients = new List<Client>();
-                       
+
             // Developer Client
-            clients.Add(CreateDeveloperClient(seedingType));
+            clients.Add(ClientSeedData.CreateDeveloperClient(seedingType));
 
-            // Mobile Client
-            clients.Add(CreateMobileAppClient(seedingType));
-
-            // Web Client
-            clients.Add(CreateWebAppClient(seedingType));
+            // Golf Handicapping Clients
+            clients.Add(ClientSeedData.CreateGolfHandicapMobileClient(seedingType));
+            clients.Add(ClientSeedData.CreateGolfHandicapSubscriptionServiceClient(seedingType));
+            clients.Add(ClientSeedData.CreateGolfHandicapTestDataGeneratorClient(seedingType)); 
             
             return clients;
         }
@@ -95,7 +94,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
         /// </summary>
         /// <param name="seedingType">Type of the seeding.</param>
         /// <returns></returns>
-        private static Client CreateMobileAppClient(SeedingType seedingType)
+        private static Client CreateGolfHandicapMobileClient(SeedingType seedingType)
         {
             Client client = null;
 
@@ -107,19 +106,8 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
             scopes.Add(IdentityServerConstants.StandardScopes.OpenId);
             scopes.Add(IdentityServerConstants.StandardScopes.Profile);
             scopes.Add(IdentityServerConstants.StandardScopes.Email);
-
-            if (seedingType == SeedingType.IntegrationTest)
-            {
-                client = new Client
-                {
-                    ClientId = "integrationTestMobileClient",
-                    ClientName = "Integration Test Mobile Client",
-                    ClientSecrets = {new Secret("integrationTestMobileClient".Sha256())},
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,
-                    AllowedScopes = scopes,                    
-                };
-            }
-            else if (seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
+            
+            if (seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
             {
                 client = new Client
                 {
@@ -130,64 +118,76 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
                     AllowedScopes = scopes
                 };
             }
-            else if (seedingType == SeedingType.Production)
-            {
-                // TODO
-            }
 
             return client;
         }
         #endregion
 
-        #region private static Client CreateWebAppClient(SeedingType seedingType)        
+        #region private static Client CreateGolfHandicapSubscriptionServiceClient(SeedingType seedingType)        
         /// <summary>
-        /// Creates the web application client.
+        /// Creates the mobile application client.
         /// </summary>
         /// <param name="seedingType">Type of the seeding.</param>
         /// <returns></returns>
-        private static Client CreateWebAppClient(SeedingType seedingType)
+        private static Client CreateGolfHandicapSubscriptionServiceClient(SeedingType seedingType)
         {
             Client client = null;
 
             // Setup the scopes
             List<String> scopes = new List<String>();
             scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Select(y => y.Name).ToList());
-            
+
             // Add in the standard scopes for GetUserInfo
             scopes.Add(IdentityServerConstants.StandardScopes.OpenId);
             scopes.Add(IdentityServerConstants.StandardScopes.Profile);
             scopes.Add(IdentityServerConstants.StandardScopes.Email);
 
-            if (seedingType == SeedingType.IntegrationTest)
+            if (seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
             {
                 client = new Client
                 {
-                    ClientId = "integrationTestWebClient",
-                    ClientName = "Integration Test Web Client",
-                    ClientSecrets = {new Secret("integrationTestWebClient".Sha256())},
-                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
-                    AllowedScopes = scopes,                    
-                };
-            }
-            else if (seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
-            {
-                client = new Client
-                {
-                    ClientId = "golfhandicap.web",
-                    ClientName = "Web App Client",
-                    ClientSecrets = {new Secret("golfhandicap.web".Sha256())},
-                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+                    ClientId = "golfhandicap.subscriptionservice",
+                    ClientName = "Subscription Service Client",
+                    ClientSecrets = { new Secret("golfhandicap.subscriptionservice".Sha256()) },
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowedScopes = scopes
                 };
-            }
-            else if (seedingType == SeedingType.Production)
-            {
-                // TODO
             }
 
             return client;
         }
         #endregion
+
+        #region private static Client CreateGolfHandicapSubscriptionServiceClient(SeedingType seedingType)        
+        /// <summary>
+        /// Creates the mobile application client.
+        /// </summary>
+        /// <param name="seedingType">Type of the seeding.</param>
+        /// <returns></returns>
+        private static Client CreateGolfHandicapTestDataGeneratorClient(SeedingType seedingType)
+        {
+            Client client = null;
+
+            // Setup the scopes
+            List<String> scopes = new List<String>();
+            scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Select(y => y.Name).ToList());
+
+            if (seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
+            {
+                client = new Client
+                         {
+                             ClientId = "golfhandicap.testdatagenerator",
+                             ClientName = "Test Data Generator Client",
+                             ClientSecrets = { new Secret("golfhandicap.testdatagenerator".Sha256()) },
+                             AllowedGrantTypes = GrantTypes.ClientCredentials,
+                             AllowedScopes = scopes
+                         };
+            }
+
+            return client;
+        }
+        #endregion
+
 
         #endregion
     }
