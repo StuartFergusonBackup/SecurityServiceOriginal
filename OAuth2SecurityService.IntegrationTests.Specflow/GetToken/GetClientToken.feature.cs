@@ -99,9 +99,9 @@ this.ScenarioInitialize(scenarioInfo);
 #line 7
 this.FeatureBackground();
 #line 11
- testRunner.Given("I have the Client Id \'integrationTestClient\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("I have the Client Id \'golfhandicap.testdatagenerator\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 12
- testRunner.And("the secret \'integrationTestClient\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the secret \'golfhandicap.testdatagenerator\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 13
  testRunner.When("I request a client token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 14
@@ -131,3 +131,4 @@ this.FeatureBackground();
 }
 #pragma warning restore
 #endregion
+

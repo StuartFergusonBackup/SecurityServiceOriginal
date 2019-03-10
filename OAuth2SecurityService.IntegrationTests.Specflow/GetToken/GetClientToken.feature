@@ -8,8 +8,8 @@ Background:
 	Given the Security Service is running
 
 Scenario: Get Client Token
-	Given I have the Client Id 'integrationTestClient'
-	And the secret 'integrationTestClient'
+	Given I have the Client Id 'golfhandicap.testdatagenerator'
+	And the secret 'golfhandicap.testdatagenerator'
 	When I request a client token
 	Then my client token request is successful
 	And a client token is returned to me

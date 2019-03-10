@@ -12,6 +12,9 @@ using TechTalk.SpecFlow;
 
 namespace OAuth2SecurityService.IntegrationTests.Specflow
 {
+    using System.Collections.Generic;
+    using DataTransferObjects;
+
     [Binding]
     [Scope(Tag = "gettoken")]
     public class GetTokenSteps : GenericSteps
@@ -88,6 +91,38 @@ namespace OAuth2SecurityService.IntegrationTests.Specflow
             responseData.TokenType.ShouldBe("bearer", StringCompareShould.IgnoreCase);
         }
 
+        [Given(@"the user '(.*)' is registered with the password '(.*)'")]
+        public async Task GivenTheUserIsRegisteredWithThePassword(string userName, String password)
+        {
+            RegisterUserRequest request = new RegisterUserRequest
+                          {
+                              Claims = new Dictionary<String, String>()
+                                       {
+                                           {"Claim1", "Claim1Value"},
+                                           {"Claim2", "Claim2Value"}
+                                       },
+            EmailAddress = userName,
+                              Password = password,
+                              PhoneNumber = "07777777777",
+                              Roles = new List<String>
+                                      {
+                                          "Club Administrator"
+                                      },
+            };
+            
+            String requestSerialised = JsonConvert.SerializeObject(request);
+            StringContent content = new StringContent(requestSerialised, Encoding.UTF8, "application/json");
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri($"http://127.0.0.1:{this.SecurityServicePort}");
+
+                HttpResponseMessage response = await client.PostAsync("/api/user/", content, CancellationToken.None).ConfigureAwait(false);
+
+                response.StatusCode.ShouldBe(HttpStatusCode.OK);
+            }
+        }
+        
         [Given(@"the username '(.*)'")]
         public void GivenTheUsername(String username)
         {

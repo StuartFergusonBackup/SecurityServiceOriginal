@@ -59,7 +59,7 @@ namespace OAuth2SecurityService.IntegrationTests.Specflow.Common
             this.SecurityServiceContainer = new Builder()
                 .UseContainer()
                 .WithName(securityServiceContainerName)
-                .WithEnvironment("SeedingType=IntegrationTest", "ASPNETCORE_ENVIRONMENT=IntegrationTest", messagingServiceAddress)
+                .WithEnvironment("SeedingType=Development", "ASPNETCORE_ENVIRONMENT=IntegrationTest", messagingServiceAddress)
                 .UseImage("oauth2securityserviceservice")
                 .ExposePort(5001)
                 .UseNetwork(this.TestNetwork)                    

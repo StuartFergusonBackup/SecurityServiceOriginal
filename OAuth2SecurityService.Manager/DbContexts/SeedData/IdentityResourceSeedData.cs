@@ -35,6 +35,13 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
                             Type = JwtClaimTypes.Subject
                         }
                     }
+                },
+                {
+                    IdentityServerConstants.StandardScopes.Email, new List<IdentityClaim>()
+                                                                    {
+                                                                        new IdentityClaim() {Type = JwtClaimTypes.Email},
+                                                                        new IdentityClaim() {Type = JwtClaimTypes.EmailVerified},
+                                                                    }
                 }
             };
 
@@ -65,6 +72,14 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
                     Description = "Your user profile information (first name, last name, etc.)",
                     Emphasize = true,
                     UserClaims = ScopeToClaimsMapping[IdentityServerConstants.StandardScopes.Profile].Select(x => x.Type).ToList()
+                },
+                new IdentityResource()
+                {
+                    Name = IdentityServerConstants.StandardScopes.Email,
+                    DisplayName = "Email",
+                    Description = "Email and Email Verified Flags",
+                    Emphasize = true,
+                    UserClaims = ScopeToClaimsMapping[IdentityServerConstants.StandardScopes.Email].Select(x => x.Type).ToList()
                 }
 
             };

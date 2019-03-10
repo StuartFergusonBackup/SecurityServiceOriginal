@@ -20,7 +20,6 @@ namespace OAuth2SecurityService.IntegrationTests.Specflow.Common
 
                 request.EmailAddress = "testemail1@testing.co.uk";
                 request.PhoneNumber = "07777777777";
-                request.PhoneNumber = "07777777777";
                 request.Roles = new List<String>
                 {
                     "Club Administrator"
