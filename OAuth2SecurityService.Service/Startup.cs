@@ -362,7 +362,9 @@ namespace OAuth2SecurityService.Service
                     throw new NotImplementedException("Production setup not complete yet");
                 }
 
-                DatabaseSeeding.InitialiseDatabase(configurationDbContext, persistedGrantDbContext, authenticationDbContext, seedingType);                
+                DatabaseSeeding.InitialisePersistedGrantDatabase(persistedGrantDbContext, seedingType);
+                DatabaseSeeding.InitialiseConfigurationDatabase(configurationDbContext, seedingType);
+                DatabaseSeeding.InitialiseAuthenticationDatabase(authenticationDbContext, seedingType);
             }
         }
 

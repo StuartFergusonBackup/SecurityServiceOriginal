@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2048
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28711.60
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{892940BA-FF36-468A-B8AD-34379F15CFA5}"
 EndProject
@@ -13,9 +13,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuth2SecurityService.Manag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuth2SecurityService.IntegrationTests.Specflow", "OAuth2SecurityService.IntegrationTests.Specflow\OAuth2SecurityService.IntegrationTests.Specflow.csproj", "{2E3DF5C2-8A38-4A03-86D7-8D463C917E47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuth2SecurityService.DataTransferObjects", "OAuth2SecurityService.DataTransferObjects\OAuth2SecurityService.DataTransferObjects.csproj", "{50FF6ECD-4223-4262-B14F-433A502E0CEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuth2SecurityService.DataTransferObjects", "OAuth2SecurityService.DataTransferObjects\OAuth2SecurityService.DataTransferObjects.csproj", "{50FF6ECD-4223-4262-B14F-433A502E0CEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuth2SecurityService.UnitTests", "OAuth2SecurityService.UnitTests\OAuth2SecurityService.UnitTests.csproj", "{BAAC4343-4F17-4B3C-80F0-DA7BB647180C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuth2SecurityService.UnitTests", "OAuth2SecurityService.UnitTests\OAuth2SecurityService.UnitTests.csproj", "{BAAC4343-4F17-4B3C-80F0-DA7BB647180C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BaseDockerImage", "BaseDockerImage", "{DF53B516-6D33-4F46-9A63-ADA891F3C602}"
+	ProjectSection(SolutionItems) = preProject
+		OAuth2SecurityService.Docker.BaseImage\CreateAuthenticationDatabase.sql = OAuth2SecurityService.Docker.BaseImage\CreateAuthenticationDatabase.sql
+		OAuth2SecurityService.Docker.BaseImage\CreateConfigurationDatabase.sql = OAuth2SecurityService.Docker.BaseImage\CreateConfigurationDatabase.sql
+		OAuth2SecurityService.Docker.BaseImage\CreatePersistedGrantStoreDatabase.sql = OAuth2SecurityService.Docker.BaseImage\CreatePersistedGrantStoreDatabase.sql
+		OAuth2SecurityService.Docker.BaseImage\Dockerfile = OAuth2SecurityService.Docker.BaseImage\Dockerfile
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

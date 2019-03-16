@@ -8,46 +8,119 @@ using OAuth2SecurityService.Manager.DbContexts.SeedData;
 
 namespace OAuth2SecurityService.Manager.DbContexts
 {
+    using System.Threading;
+
     public class DatabaseSeeding
     {
-        public static void InitialiseDatabase(ConfigurationDbContext configurationDbContext, 
-                                              PersistedGrantDbContext persistedGrantDbContext, 
-                                              AuthenticationDbContext authenticationDbContext,
+        public static void InitialisePersistedGrantDatabase(PersistedGrantDbContext persistedGrantDbContext,
+                                                            SeedingType seedingType)
+        {
+            Boolean isDbInitialised = false;
+            Int32 retryCounter = 0;
+            while (retryCounter < 20 && !isDbInitialised)
+            {
+                try
+                {
+                    if (persistedGrantDbContext.Database.IsMySql())
+                    {
+                        persistedGrantDbContext.Database.Migrate();
+                    }
+
+                    persistedGrantDbContext.SaveChanges();
+
+                    isDbInitialised = true;
+                    break;
+                }
+                catch(Exception ex)
+                {
+                    retryCounter++;
+                    Thread.Sleep(10000);
+                }
+            }
+
+            if (!isDbInitialised)
+            {
+                String connString = persistedGrantDbContext.Database.GetDbConnection().ConnectionString;
+
+                Exception newException = new Exception($"Error initialising Db with Connection String [{connString}]");
+                throw newException;
+            }
+        }
+
+        public static void InitialiseAuthenticationDatabase(AuthenticationDbContext authenticationDbContext,
+                                                            SeedingType seedingType)
+        {
+            Boolean isDbInitialised = false;
+            Int32 retryCounter = 0;
+            while (retryCounter < 20 && !isDbInitialised)
+            {
+                try
+                {
+                    if (authenticationDbContext.Database.IsMySql())
+                    {
+                        authenticationDbContext.Database.Migrate();
+                    }
+
+                    AddRoles(authenticationDbContext, seedingType);
+                    AddUsers(authenticationDbContext, seedingType);
+                    AddUsersToRoles(authenticationDbContext, seedingType);
+
+                    authenticationDbContext.SaveChanges();
+
+                    isDbInitialised = true;
+                    break;
+                }
+                catch(Exception ex)
+                {
+                    retryCounter++;
+                    Thread.Sleep(10000);
+                }
+            }
+
+            if (!isDbInitialised)
+            {
+                String connString = authenticationDbContext.Database.GetDbConnection().ConnectionString;
+
+                Exception newException = new Exception($"Error initialising Db with Connection String [{connString}]");
+                throw newException;
+            }
+        }
+
+        public static void InitialiseConfigurationDatabase(ConfigurationDbContext configurationDbContext,
                                               SeedingType seedingType)
         {
-            try
+            Boolean isDbInitialised = false;
+            Int32 retryCounter = 0;
+            while (retryCounter < 20 && !isDbInitialised)
             {
-                if (configurationDbContext.Database.IsMySql())
+                try
                 {
-                    configurationDbContext.Database.Migrate();
-                }
+                    if (configurationDbContext.Database.IsMySql())
+                    {
+                        configurationDbContext.Database.Migrate();
+                    }
 
-                if (persistedGrantDbContext.Database.IsMySql())
+                    AddClients(configurationDbContext, seedingType);
+                    AddApiResources(configurationDbContext, seedingType);
+                    AddIdentityResources(configurationDbContext, seedingType);
+
+                    configurationDbContext.SaveChanges();
+
+                    isDbInitialised = true;
+                    break;
+                }
+                catch(Exception ex)
                 {
-                    persistedGrantDbContext.Database.Migrate();
+                    retryCounter++;
+                    Thread.Sleep(10000);
                 }
-
-                if (authenticationDbContext.Database.IsMySql())
-                {
-                    authenticationDbContext.Database.Migrate();
-                }
-
-                AddClients(configurationDbContext, seedingType);
-                AddApiResources(configurationDbContext, seedingType);
-                AddRoles(authenticationDbContext, seedingType);
-                AddUsers(authenticationDbContext, seedingType);
-                AddUsersToRoles(authenticationDbContext, seedingType);
-                AddIdentityResources(configurationDbContext, seedingType);
-
-                configurationDbContext.SaveChanges();
-                persistedGrantDbContext.SaveChanges();
-                authenticationDbContext.SaveChanges();
             }
-            catch (Exception ex)
-            {
-                var connString = configurationDbContext.Database.GetDbConnection().ConnectionString;
 
-                Exception newException = new Exception($"Connection String [{connString}]", ex);
+            if (!isDbInitialised)
+            {
+                String connString = configurationDbContext.Database.GetDbConnection().ConnectionString;
+
+                Exception newException = new Exception($"Error initialising Db with Connection String [{connString}]");
                 throw newException;
             }
         }
