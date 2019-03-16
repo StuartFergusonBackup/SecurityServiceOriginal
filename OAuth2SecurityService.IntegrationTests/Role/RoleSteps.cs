@@ -70,7 +70,7 @@
         [Then(@"the role details should be returned")]
         public async Task ThenTheRoleDetailsShouldBeReturned()
         {
-            HttpResponseMessage httpResponse = this.ScenarioContext.Get<HttpResponseMessage>("CreateRoleHttpResponse");
+            HttpResponseMessage httpResponse = this.ScenarioContext.Get<HttpResponseMessage>("GetRoleHttpResponse");
             httpResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
             GetRoleResponse responseData = JsonConvert.DeserializeObject<GetRoleResponse>(await httpResponse.Content.ReadAsStringAsync());
@@ -106,7 +106,7 @@
             {
                 client.BaseAddress = new Uri($"http://127.0.0.1:{this.SecurityServicePort}");
 
-                this.ScenarioContext["GetRoleHttpResponse"] = await client.GetAsync($"/api/role?roleName{roleName}", CancellationToken.None).ConfigureAwait(false);
+                this.ScenarioContext["GetRoleHttpResponse"] = await client.GetAsync($"/api/role?roleName={roleName}", CancellationToken.None).ConfigureAwait(false);
             }
         }
 

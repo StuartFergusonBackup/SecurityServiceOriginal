@@ -58,7 +58,10 @@ namespace OAuth2SecurityService.UnitTests
             CreateRoleSuccess,
             CreateRoleInvalidData,
             CreateRoleDuplicateRoleName,
-            CreateRoleCreateRoleFailed
+            CreateRoleCreateRoleFailed,
+            GetRoleSuccess,
+            GetRoleRoleNotFound,
+            GetRoleInvalidData,
         }
 
         private void SetupPasswordHasher(TestScenario testScenario)
@@ -428,6 +431,21 @@ namespace OAuth2SecurityService.UnitTests
                 IdentityRole roleFound = new IdentityRole("testrole");
                 this.RoleStore.Setup(r => r.FindByNameAsync(It.IsAny<String>(), CancellationToken.None))
                     .ReturnsAsync(roleFound);
+            }
+            else if (testScenario == TestScenario.GetRoleSuccess)
+            {
+                IdentityRole roleFound = new IdentityRole("testrole");
+                roleFound.NormalizedName = "TESTROLE";
+                roleFound.Id = "15426DB6-A04E-4FB7-B796-0C8CD76111E0";
+
+                this.RoleStore.Setup(r => r.FindByNameAsync(It.IsAny<String>(), CancellationToken.None))
+                    .ReturnsAsync(roleFound);
+            }
+            else if (testScenario == TestScenario.GetRoleRoleNotFound)
+            {
+                IdentityRole roleNotFound = null;
+                this.RoleStore.Setup(r => r.FindByNameAsync(It.IsAny<String>(), CancellationToken.None))
+                    .ReturnsAsync(roleNotFound);
             }
         }
 
