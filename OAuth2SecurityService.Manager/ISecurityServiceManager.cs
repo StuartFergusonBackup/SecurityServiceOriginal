@@ -1,19 +1,13 @@
-﻿using OAuth2SecurityService.DataTransferObjects;
-using System.Threading;
-using System.Threading.Tasks;
-using OAuth2SecurityService.Manager.DbContexts;
-
-namespace OAuth2SecurityService.Manager
+﻿namespace OAuth2SecurityService.Manager
 {
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using DataTransferObjects;
+
     public interface ISecurityServiceManager
     {
-        /// <summary>
-        /// Registers the user.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
-        Task<RegisterUserResponse> RegisterUser(RegisterUserRequest request, CancellationToken cancellationToken);
+        #region Methods
 
         /// <summary>
         /// Creates the role.
@@ -21,6 +15,27 @@ namespace OAuth2SecurityService.Manager
         /// <param name="request">The request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        Task<CreateRoleResponse> CreateRole(CreateRoleRequest request, CancellationToken cancellationToken);
+        Task<CreateRoleResponse> CreateRole(CreateRoleRequest request,
+                                            CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the name of the role by.
+        /// </summary>
+        /// <param name="roleName">Name of the role.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<GetRoleResponse> GetRoleByName(String roleName,
+                                            CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Registers the user.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<RegisterUserResponse> RegisterUser(RegisterUserRequest request,
+                                                CancellationToken cancellationToken);
+
+        #endregion
     }
 }

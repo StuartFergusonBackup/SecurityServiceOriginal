@@ -13,7 +13,6 @@ using Ductus.FluentDocker.Builders;
 using Ductus.FluentDocker.Model.Builders;
 using Ductus.FluentDocker.Services;
 using Ductus.FluentDocker.Services.Extensions;
-using MySql.Data.MySqlClient;
 using TechTalk.SpecFlow;
 
 namespace OAuth2SecurityService.IntegrationTests.Specflow.Common
@@ -46,8 +45,9 @@ namespace OAuth2SecurityService.IntegrationTests.Specflow.Common
             this.MessagingServiceContainer = new Builder()
                 .UseContainer()
                 .WithName(messagingServiceContainerName)
-                .WithEnvironment("ASPNETCORE_ENVIRONMENT=IntegrationTest")
-                .UseImage("messagingserviceservice")
+                .WithEnvironment("ASPNETCORE_ENVIRONMENT=IntegrationTest")                
+                .WithCredential("https://www.docker.com", "stuartferguson", "Sc0tland")
+                .UseImage("stuartferguson/messagingservice")
                 .ExposePort(5002)
                 .UseNetwork(this.TestNetwork)
                 .Mount($"D:\\temp\\docker\\{testFolder}", "/home", MountType.ReadWrite)                
