@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using OAuth2SecurityService.DataTransferObjects;
-using OAuth2SecurityService.Manager;
-
-namespace OAuth2SecurityService.Service.Controllers
+﻿namespace OAuth2SecurityService.Service.Controllers
 {
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using DataTransferObjects;
+    using Manager;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class RoleController : ControllerBase
@@ -23,7 +20,8 @@ namespace OAuth2SecurityService.Service.Controllers
 
         #endregion
 
-        #region Constructors        
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RoleController"/> class.
         /// </summary>
@@ -32,11 +30,11 @@ namespace OAuth2SecurityService.Service.Controllers
         {
             this.Manager = manager;
         }
+
         #endregion
 
-        #region Public Methods
+        #region Methods
 
-        #region public async Task<IActionResult> PostRole([FromBody] CreateRoleRequest request, CancellationToken cancellationToken)
         /// <summary>
         /// Posts the role.
         /// </summary>
@@ -44,13 +42,22 @@ namespace OAuth2SecurityService.Service.Controllers
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> PostRole([FromBody] CreateRoleRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> PostRole([FromBody] CreateRoleRequest request,
+                                                  CancellationToken cancellationToken)
         {
-            var result = await this.Manager.CreateRole(request, cancellationToken);
+            CreateRoleResponse result = await this.Manager.CreateRole(request, cancellationToken);
 
             return this.Ok(result);
         }
-        #endregion
+        
+        [HttpGet]
+        public async Task<IActionResult> GetRole([FromQuery] String roleName,
+                                                 CancellationToken cancellationToken)
+        {
+            GetRoleResponse result = await this.Manager.GetRoleByName(roleName, cancellationToken);
+
+            return this.Ok(result);
+        }
 
         #endregion
     }
