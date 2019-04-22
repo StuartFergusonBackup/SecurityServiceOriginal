@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using IdentityModel.Client;
     using IdentityServer4;
     using IdentityServer4.Models;
 
@@ -92,13 +93,11 @@
                              AllowedGrantTypes = GrantTypes.Hybrid,
                              AllowedScopes = scopes,
                              AllowOfflineAccess = true,
+                             RedirectUris = ClientSeedData.SetRedirectUris(seedingType),
+                             PostLogoutRedirectUris = ClientSeedData.SetPostLogoutRedirectUris(seedingType)
                          };
             }
-
-            // Set the Redirect Urls
-            ClientSeedData.SetRedirectUris(client, seedingType);
-            ClientSeedData.SetPostLogoutRedirectUris(client, seedingType);
-
+            
             return client;
         }
 
@@ -210,20 +209,22 @@
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="seedingType">Type of the seeding.</param>
-        private static void SetPostLogoutRedirectUris(Client client,
-                                                      SeedingType seedingType)
+        private static List<String> SetPostLogoutRedirectUris(SeedingType seedingType)
         {
+            List<String> redirectUriList = new List<String>();
             switch(seedingType)
             {
                 case SeedingType.Development:
-                    client.RedirectUris.Add("http://localhost:5005/signout-callback-oidc");
-                    client.RedirectUris.Add("http://3.9.26.155:5005/signout-callback-oidc");
+                    redirectUriList.Add("http://localhost:5005/signout-callback-oidc");
+                    redirectUriList.Add("http://3.9.26.155:5005/signout-callback-oidc");
                     break;
                 case SeedingType.Staging:
                     break;
                 case SeedingType.Production:
                     break;
             }
+
+            return redirectUriList;
         }
 
         /// <summary>
@@ -231,20 +232,23 @@
         /// </summary>
         /// <param name="client">The client.</param>
         /// <param name="seedingType">Type of the seeding.</param>
-        private static void SetRedirectUris(Client client,
-                                            SeedingType seedingType)
+        private static List<String> SetRedirectUris(SeedingType seedingType)
         {
-            switch(seedingType)
+            List<String> redirectUriList = new List<String>();
+
+            switch (seedingType)
             {
                 case SeedingType.Development:
-                    client.RedirectUris.Add("http://localhost:5005/signin-oidc");
-                    client.RedirectUris.Add("http://3.9.26.155:5005/signin-oidc");
+                    redirectUriList.Add("http://localhost:5005/signin-oidc");
+                    redirectUriList.Add("http://3.9.26.155:5005/signin-oidc");
                     break;
                 case SeedingType.Staging:
                     break;
                 case SeedingType.Production:
                     break;
             }
+
+            return redirectUriList;
         }
 
         #endregion
