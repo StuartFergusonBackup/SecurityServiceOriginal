@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using IdentityServer4;
-using IdentityServer4.Models;
-using Client = IdentityServer4.Models.Client;
-using Secret = IdentityServer4.Models.Secret;
-
-namespace OAuth2SecurityService.Manager.DbContexts.SeedData
+﻿namespace OAuth2SecurityService.Manager.DbContexts.SeedData
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using IdentityServer4;
+    using IdentityServer4.Models;
+
     public class ClientSeedData
     {
-        #region Public Methods
+        #region Methods
 
-        #region public static List<Client> GetClients()        
         /// <summary>
         /// Gets the clients.
         /// </summary>
@@ -28,17 +24,12 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
             // Golf Handicapping Clients
             clients.Add(ClientSeedData.CreateGolfHandicapMobileClient(seedingType));
             clients.Add(ClientSeedData.CreateGolfHandicapSubscriptionServiceClient(seedingType));
-            clients.Add(ClientSeedData.CreateGolfHandicapTestDataGeneratorClient(seedingType)); 
-            
+            clients.Add(ClientSeedData.CreateGolfHandicapTestDataGeneratorClient(seedingType));
+            clients.Add(ClientSeedData.CreateGolfHandicapAdminWebsiteClient(seedingType));
+
             return clients;
         }
-        #endregion
 
-        #endregion
-
-        #region Private Methods
-
-        #region private static Client CreateDeveloperClient(SeedingType seedingType) 
         /// <summary>
         /// Creates the developer client.
         /// </summary>
@@ -50,8 +41,8 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
 
             // Setup the scopes
             List<String> scopes = new List<String>();
-            scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Select(y => y.Name).ToList());            
-            
+            scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Select(y => y.Name).ToList());
+
             if (seedingType == SeedingType.IntegrationTest || seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
             {
                 // Add in the standard scopes for GetUserInfo
@@ -60,20 +51,57 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
                 scopes.Add(IdentityServerConstants.StandardScopes.Email);
 
                 client = new Client
-                {
-                    ClientId = "developerClient",
-                    ClientName = "Developer Client",
-                    ClientSecrets = {new Secret("developerClient".Sha256())},
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    AllowedScopes = scopes
-                };
+                         {
+                             ClientId = "developerClient",
+                             ClientName = "Developer Client",
+                             ClientSecrets =
+                             {
+                                 new Secret("developerClient".Sha256())
+                             },
+                             AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                             AllowedScopes = scopes
+                         };
             }
 
             return client;
         }
-        #endregion
 
-        #region private static Client CreateMobileAppClient(SeedingType seedingType)        
+        private static Client CreateGolfHandicapAdminWebsiteClient(SeedingType seedingType)
+        {
+            Client client = null;
+
+            // Setup the scopes
+            List<String> scopes = new List<String>();
+            scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Select(y => y.Name).ToList());
+
+            if (seedingType == SeedingType.IntegrationTest || seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
+            {
+                // Add in the standard scopes for GetUserInfo
+                scopes.Add(IdentityServerConstants.StandardScopes.OpenId);
+                scopes.Add(IdentityServerConstants.StandardScopes.Profile);
+                scopes.Add(IdentityServerConstants.StandardScopes.Email);
+
+                client = new Client
+                         {
+                             ClientId = "golfhandicap.adminwebsite",
+                             ClientName = "Golf Club Admin Website Client",
+                             ClientSecrets =
+                             {
+                                 new Secret("golfhandicap.adminwebsite".Sha256())
+                             },
+                             AllowedGrantTypes = GrantTypes.Hybrid,
+                             AllowedScopes = scopes,
+                             AllowOfflineAccess = true,
+                         };
+            }
+
+            // Set the Redirect Urls
+            ClientSeedData.SetRedirectUris(client, seedingType);
+            ClientSeedData.SetPostLogoutRedirectUris(client, seedingType);
+
+            return client;
+        }
+
         /// <summary>
         /// Creates the mobile application client.
         /// </summary>
@@ -95,20 +123,21 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
             if (seedingType == SeedingType.IntegrationTest || seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
             {
                 client = new Client
-                {
-                    ClientId = "golfhandicap.mobile",
-                    ClientName = "Mobile App Client",
-                    ClientSecrets = {new Secret("golfhandicap.mobile".Sha256())},
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    AllowedScopes = scopes
-                };
+                         {
+                             ClientId = "golfhandicap.mobile",
+                             ClientName = "Mobile App Client",
+                             ClientSecrets =
+                             {
+                                 new Secret("golfhandicap.mobile".Sha256())
+                             },
+                             AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                             AllowedScopes = scopes
+                         };
             }
 
             return client;
         }
-        #endregion
 
-        #region private static Client CreateGolfHandicapSubscriptionServiceClient(SeedingType seedingType)        
         /// <summary>
         /// Creates the mobile application client.
         /// </summary>
@@ -130,20 +159,21 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
             if (seedingType == SeedingType.IntegrationTest || seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
             {
                 client = new Client
-                {
-                    ClientId = "golfhandicap.subscriptionservice",
-                    ClientName = "Subscription Service Client",
-                    ClientSecrets = { new Secret("golfhandicap.subscriptionservice".Sha256()) },
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    AllowedScopes = scopes
-                };
+                         {
+                             ClientId = "golfhandicap.subscriptionservice",
+                             ClientName = "Subscription Service Client",
+                             ClientSecrets =
+                             {
+                                 new Secret("golfhandicap.subscriptionservice".Sha256())
+                             },
+                             AllowedGrantTypes = GrantTypes.ClientCredentials,
+                             AllowedScopes = scopes
+                         };
             }
 
             return client;
         }
-        #endregion
 
-        #region private static Client CreateGolfHandicapSubscriptionServiceClient(SeedingType seedingType)        
         /// <summary>
         /// Creates the mobile application client.
         /// </summary>
@@ -163,7 +193,10 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
                          {
                              ClientId = "golfhandicap.testdatagenerator",
                              ClientName = "Test Data Generator Client",
-                             ClientSecrets = { new Secret("golfhandicap.testdatagenerator".Sha256()) },
+                             ClientSecrets =
+                             {
+                                 new Secret("golfhandicap.testdatagenerator".Sha256())
+                             },
                              AllowedGrantTypes = GrantTypes.ClientCredentials,
                              AllowedScopes = scopes
                          };
@@ -171,8 +204,48 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
 
             return client;
         }
-        #endregion
 
+        /// <summary>
+        /// Sets the post logout redirect uris.
+        /// </summary>
+        /// <param name="client">The client.</param>
+        /// <param name="seedingType">Type of the seeding.</param>
+        private static void SetPostLogoutRedirectUris(Client client,
+                                                      SeedingType seedingType)
+        {
+            switch(seedingType)
+            {
+                case SeedingType.Development:
+                    client.RedirectUris.Add("http://localhost:5005/signout-callback-oidc");
+                    client.RedirectUris.Add("http://3.9.26.155:5005/signout-callback-oidc");
+                    break;
+                case SeedingType.Staging:
+                    break;
+                case SeedingType.Production:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Sets the redirect uris.
+        /// </summary>
+        /// <param name="client">The client.</param>
+        /// <param name="seedingType">Type of the seeding.</param>
+        private static void SetRedirectUris(Client client,
+                                            SeedingType seedingType)
+        {
+            switch(seedingType)
+            {
+                case SeedingType.Development:
+                    client.RedirectUris.Add("http://localhost:5005/signin-oidc");
+                    client.RedirectUris.Add("http://3.9.26.155:5005/signin-oidc");
+                    break;
+                case SeedingType.Staging:
+                    break;
+                case SeedingType.Production:
+                    break;
+            }
+        }
 
         #endregion
     }
