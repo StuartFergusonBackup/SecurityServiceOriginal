@@ -243,6 +243,64 @@
             return response;
         }
 
+        public async Task<Boolean> ValidateCredentials(String userName,
+                                              String password,
+                                              CancellationToken cancellationToken)
+        {
+            // Get the user record by name
+            IdentityUser user = await this.UserManager.FindByNameAsync(userName);
+
+            // Now validate the entered password
+            PasswordVerificationResult verificationResult = this.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
+
+            // Return the result
+            return verificationResult == PasswordVerificationResult.Success;
+        }
+
+        /// <summary>
+        /// Gets the name of the user by user.
+        /// </summary>
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<IdentityUser> GetUserByUserName(String userName,
+                                            CancellationToken cancellationToken)
+        {
+            IdentityUser user = await this.UserManager.FindByNameAsync(userName);
+
+            return user;
+        }
+
+        /// <summary>
+        /// Gets the user by external provider.
+        /// </summary>
+        /// <param name="providerName">Name of the provider.</param>
+        /// <param name="providerUserId">The provider user identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<IdentityUser> GetUserByExternalProvider(String providerName,
+                                                    String providerUserId,
+                                                    CancellationToken cancellationToken)
+        {
+            // TODO;
+            return null;
+        }
+
+        /// <summary>
+        /// Automatics the provision user.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="providerUserId">The provider user identifier.</param>
+        /// <param name="claims">The claims.</param>
+        /// <returns></returns>
+        public async Task<IdentityUser> AutoProvisionUser(String provider,
+                                            String providerUserId,
+                                            IEnumerable<Claim> claims)
+        {
+            // TODO;
+            return null;
+        }
+
         /// <summary>
         /// Sends the registration email.
         /// </summary>
