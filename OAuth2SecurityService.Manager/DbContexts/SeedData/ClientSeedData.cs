@@ -94,7 +94,8 @@
                              AllowedScopes = scopes,
                              AllowOfflineAccess = true,
                              RedirectUris = ClientSeedData.SetRedirectUris(seedingType),
-                             PostLogoutRedirectUris = ClientSeedData.SetPostLogoutRedirectUris(seedingType)
+                             PostLogoutRedirectUris = ClientSeedData.SetPostLogoutRedirectUris(seedingType),
+                             RequireConsent = false,                             
                          };
             }
             
