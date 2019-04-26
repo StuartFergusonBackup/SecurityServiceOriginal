@@ -305,6 +305,8 @@ namespace OAuth2SecurityService.Service
         {
             services.AddSingleton<ISecurityServiceManager, SecurityServiceManager>();
             services.AddSingleton<IPasswordHasher<IdentityUser>, PasswordHasher<IdentityUser>>();
+            services.AddSingleton<IUserClaimsPrincipalFactory<IdentityUser>, UserClaimsPrincipalFactory<IdentityUser>>();
+            services.AddSingleton<ILogger<SignInManager<IdentityUser>>, Logger<SignInManager<IdentityUser>>>();
             services.AddSingleton<IMessagingService, MessagingService>();
         }
         #endregion

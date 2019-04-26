@@ -95,7 +95,7 @@
                              AllowOfflineAccess = true,
                              RedirectUris = ClientSeedData.SetRedirectUris(seedingType),
                              PostLogoutRedirectUris = ClientSeedData.SetPostLogoutRedirectUris(seedingType),
-                             RequireConsent = false,                             
+                             RequireConsent = false,                            
                          };
             }
             
