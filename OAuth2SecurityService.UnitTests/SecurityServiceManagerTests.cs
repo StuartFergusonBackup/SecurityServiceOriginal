@@ -7,6 +7,7 @@
     using Manager;
     using Manager.Exceptions;
     using Manager.Services;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Moq;
     using Shared.EventStore;
@@ -26,9 +27,12 @@
             Mock<IMessagingService> messagingService = new Mock<IMessagingService>();
             Mock<IRoleStore<IdentityRole>> roleStore = new Mock<IRoleStore<IdentityRole>>();
             RoleManager<IdentityRole> roleManager = new RoleManager<IdentityRole>(roleStore.Object, null, null, null, null);
+            Mock<IHttpContextAccessor> contextAccessor = new Mock<IHttpContextAccessor>();
+            Mock<IUserClaimsPrincipalFactory<IdentityUser>> claimsFactory = new Mock<IUserClaimsPrincipalFactory<IdentityUser>>();
             //Mock<Func<IConfigurationDbContext>> configurationDbContext = new Mock<Func<IConfigurationDbContext>>();
+            SignInManager<IdentityUser> signInManager = new SignInManager<IdentityUser>(userManager, contextAccessor.Object, claimsFactory.Object, null, null, null);
 
-            SecurityServiceManager securityServiceManager = new SecurityServiceManager(passwordHasher.Object, userManager, messagingService.Object, roleManager);
+            SecurityServiceManager securityServiceManager = new SecurityServiceManager(passwordHasher.Object, userManager, messagingService.Object, roleManager, signInManager);
 
             securityServiceManager.ShouldNotBeNull();
         }

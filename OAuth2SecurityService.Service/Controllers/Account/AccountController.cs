@@ -203,6 +203,7 @@ namespace OAuth2SecurityService.Service.Controllers.Account
             {
                 // delete local authentication cookie
                 await this.HttpContext.SignOutAsync();
+                
 
                 // raise the logout event
                 await this.EventService.RaiseAsync(new UserLogoutSuccessEvent(this.User.GetSubjectId(), this.User.GetDisplayName()));

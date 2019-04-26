@@ -14,6 +14,10 @@
     using Shared.EventStore;
     using Shared.General;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <seealso cref="OAuth2SecurityService.Manager.ISecurityServiceManager" />
     public class SecurityServiceManager : ISecurityServiceManager
     {
         #region Fields
@@ -34,6 +38,11 @@
         private readonly RoleManager<IdentityRole> RoleManager;
 
         /// <summary>
+        /// The sign in manager
+        /// </summary>
+        private readonly SignInManager<IdentityUser> SignInManager;
+
+        /// <summary>
         /// The user manager
         /// </summary>
         private readonly UserManager<IdentityUser> UserManager;
@@ -49,21 +58,50 @@
         /// <param name="userManager">The user manager.</param>
         /// <param name="messagingService">The messaging service.</param>
         /// <param name="roleManager">The role manager.</param>
+        /// <param name="signInManager">The sign in manager.</param>
         public SecurityServiceManager(IPasswordHasher<IdentityUser> passwordHasher,
                                       UserManager<IdentityUser> userManager,
                                       IMessagingService messagingService,
-                                      RoleManager<IdentityRole> roleManager)
+                                      RoleManager<IdentityRole> roleManager,
+                                      SignInManager<IdentityUser> signInManager)
         {
             this.PasswordHasher = passwordHasher;
             this.UserManager = userManager;
             this.MessagingService = messagingService;
             this.RoleManager = roleManager;
+            this.SignInManager = signInManager;
         }
 
         #endregion
 
         #region Methods
 
+        /// <summary>
+        /// Automatics the provision user.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="providerUserId">The provider user identifier.</param>
+        /// <param name="claims">The claims.</param>
+        /// <returns></returns>
+        public async Task<IdentityUser> AutoProvisionUser(String provider,
+                                                          String providerUserId,
+                                                          IEnumerable<Claim> claims)
+        {
+            // TODO;
+            return null;
+        }
+
+        /// <summary>
+        /// Creates the role.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="IdentityResultException">
+        /// Role {newIdentityRole.Name}
+        /// or
+        /// Error creating role {newIdentityRole.Name}
+        /// </exception>
         public async Task<CreateRoleResponse> CreateRole(CreateRoleRequest request,
                                                          CancellationToken cancellationToken)
         {
@@ -110,9 +148,10 @@
         /// <param name="roleName">Name of the role.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
+        /// <exception cref="NotFoundException">No role found with name {roleName}</exception>
         /// <exception cref="NotImplementedException"></exception>
         public async Task<GetRoleResponse> GetRoleByName(String roleName,
-                                        CancellationToken cancellationToken)
+                                                         CancellationToken cancellationToken)
         {
             Guard.ThrowIfNullOrEmpty(roleName, typeof(ArgumentNullException), "role name must be provided to get a role by name");
 
@@ -129,10 +168,38 @@
                                            Id = Guid.Parse(identityRole.Id),
                                            Name = identityRole.Name,
                                            NormalizedName = identityRole.NormalizedName
-
                                        };
 
             return response;
+        }
+
+        /// <summary>
+        /// Gets the user by external provider.
+        /// </summary>
+        /// <param name="providerName">Name of the provider.</param>
+        /// <param name="providerUserId">The provider user identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<IdentityUser> GetUserByExternalProvider(String providerName,
+                                                                  String providerUserId,
+                                                                  CancellationToken cancellationToken)
+        {
+            // TODO;
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the name of the user by user.
+        /// </summary>
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<IdentityUser> GetUserByUserName(String userName,
+                                                          CancellationToken cancellationToken)
+        {
+            IdentityUser user = await this.UserManager.FindByNameAsync(userName);
+
+            return user;
         }
 
         /// <summary>
@@ -141,16 +208,15 @@
         /// <param name="request">The request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        /// <exception cref="System.NullReferenceException">Error generating password hash value, hash was null or empty</exception>
-        /// <exception cref="IdentityResultException">
-        /// Error creating user {newIdentityUser.UserName}
+        /// <exception cref="NullReferenceException">Error generating password hash value, hash was null or empty</exception>
+        /// <exception cref="IdentityResultException">Error creating user {newIdentityUser.UserName}
         /// or
         /// Error adding roles [{String.Join(",", request.Roles)}] to user {newIdentityUser.UserName}
         /// or
         /// Error adding claims [{String.Join(",", claims)}] to user {newIdentityUser.UserName}
         /// or
-        /// Error deleting user {newIdentityUser.UserName}
-        /// </exception>
+        /// Error deleting user {newIdentityUser.UserName}</exception>
+        /// <exception cref="System.NullReferenceException">Error generating password hash value, hash was null or empty</exception>
         public async Task<RegisterUserResponse> RegisterUser(RegisterUserRequest request,
                                                              CancellationToken cancellationToken)
         {
@@ -243,9 +309,25 @@
             return response;
         }
 
+        /// <summary>
+        /// Signouts this instance.
+        /// </summary>
+        /// <returns></returns>
+        public async Task Signout()
+        {
+            await this.SignInManager.SignOutAsync();
+        }
+
+        /// <summary>
+        /// Validates the credentials.
+        /// </summary>
+        /// <param name="userName">Name of the user.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
         public async Task<Boolean> ValidateCredentials(String userName,
-                                              String password,
-                                              CancellationToken cancellationToken)
+                                                       String password,
+                                                       CancellationToken cancellationToken)
         {
             // Get the user record by name
             IdentityUser user = await this.UserManager.FindByNameAsync(userName);
@@ -255,50 +337,6 @@
 
             // Return the result
             return verificationResult == PasswordVerificationResult.Success;
-        }
-
-        /// <summary>
-        /// Gets the name of the user by user.
-        /// </summary>
-        /// <param name="userName">Name of the user.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
-        public async Task<IdentityUser> GetUserByUserName(String userName,
-                                            CancellationToken cancellationToken)
-        {
-            IdentityUser user = await this.UserManager.FindByNameAsync(userName);
-
-            return user;
-        }
-
-        /// <summary>
-        /// Gets the user by external provider.
-        /// </summary>
-        /// <param name="providerName">Name of the provider.</param>
-        /// <param name="providerUserId">The provider user identifier.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
-        public async Task<IdentityUser> GetUserByExternalProvider(String providerName,
-                                                    String providerUserId,
-                                                    CancellationToken cancellationToken)
-        {
-            // TODO;
-            return null;
-        }
-
-        /// <summary>
-        /// Automatics the provision user.
-        /// </summary>
-        /// <param name="provider">The provider.</param>
-        /// <param name="providerUserId">The provider user identifier.</param>
-        /// <param name="claims">The claims.</param>
-        /// <returns></returns>
-        public async Task<IdentityUser> AutoProvisionUser(String provider,
-                                            String providerUserId,
-                                            IEnumerable<Claim> claims)
-        {
-            // TODO;
-            return null;
         }
 
         /// <summary>

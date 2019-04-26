@@ -15,6 +15,8 @@ using OAuth2SecurityService.Manager.Services;
 
 namespace OAuth2SecurityService.UnitTests
 {
+    using Microsoft.AspNetCore.Http;
+
     public partial class SecurityServiceManagerTests
     {
         private Mock<IPasswordHasher<IdentityUser>> PasswordHasher = new Mock<IPasswordHasher<IdentityUser>>();
@@ -27,6 +29,8 @@ namespace OAuth2SecurityService.UnitTests
         private Mock<IRoleStore<IdentityRole>> RoleStore = new Mock<IRoleStore<IdentityRole>>();
         private Mock<IdentityErrorDescriber> ErrorDescriber = new Mock<IdentityErrorDescriber>();
         private Mock<IServiceProvider> ServiceProvider = new Mock<IServiceProvider>();
+        private Mock<IHttpContextAccessor> ContextAccessor = new Mock<IHttpContextAccessor>();
+        private Mock<IUserClaimsPrincipalFactory<IdentityUser>> ClaimsFactory = new Mock<IUserClaimsPrincipalFactory<IdentityUser>>();
 
         public enum TestScenario
         {
@@ -549,18 +553,16 @@ namespace OAuth2SecurityService.UnitTests
             Mock<Func<IConfigurationDbContext>> configurationDbContextResolver =
                 new Mock<Func<IConfigurationDbContext>>();
 
+            SignInManager<IdentityUser> signInManager = new SignInManager<IdentityUser>(userManager, this.ContextAccessor.Object, this.ClaimsFactory.Object, null, null, null);
             //Mock<IOptions<ServiceOptions>> serviceOptions = new Mock<IOptions<ServiceOptions>>();
             //serviceOptions.Setup(so => so.Value).Returns(new ServiceOptions
             //{
             //    PublicOrigin = "http://localhost"
             //});
             Mock<IMessagingService> messagingService = new Mock<IMessagingService>();
-
-            //SecurityServiceManager securityServiceManager =
-            //    new SecurityServiceManager(this.PasswordHasher.Object, userManager, roleManager, configurationDbContextResolver.Object, EmailService.Object, serviceOptions.Object);
             
             SecurityServiceManager securityServiceManager =
-                new SecurityServiceManager(this.PasswordHasher.Object, userManager, messagingService.Object, roleManager);
+                new SecurityServiceManager(this.PasswordHasher.Object, userManager, messagingService.Object, roleManager, signInManager);
 
             return securityServiceManager;
         }
