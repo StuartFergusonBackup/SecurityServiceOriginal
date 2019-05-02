@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 
 namespace OAuth2SecurityService.Manager.Services
 {
+    using System.Reflection.Metadata;
+
     public interface IMessagingService
     {
         /// <summary>
