@@ -307,7 +307,16 @@ namespace OAuth2SecurityService.Service
             services.AddSingleton<IPasswordHasher<IdentityUser>, PasswordHasher<IdentityUser>>();
             services.AddSingleton<IUserClaimsPrincipalFactory<IdentityUser>, UserClaimsPrincipalFactory<IdentityUser>>();
             services.AddSingleton<ILogger<SignInManager<IdentityUser>>, Logger<SignInManager<IdentityUser>>>();
-            services.AddSingleton<IMessagingService, MessagingService>();
+
+            Boolean useDummyMessagingService = Startup.Configuration.GetValue<Boolean>("ServiceOptions:UseDummyMessagingService");
+            if (useDummyMessagingService)
+            {
+                services.AddSingleton<IMessagingService, DummyMessagingService>();
+            }
+            else
+            {
+                services.AddSingleton<IMessagingService, MessagingService>();
+            }            
         }
         #endregion
 
