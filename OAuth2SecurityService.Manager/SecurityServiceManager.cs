@@ -9,6 +9,7 @@
     using System.Threading.Tasks;
     using DataTransferObjects;
     using Exceptions;
+    using IdentityModel;
     using Microsoft.AspNetCore.Identity;
     using Services;
     using Shared.EventStore;
@@ -272,7 +273,15 @@
                 }
 
                 // Add the requested claims
-                var claims = request.Claims.Select(x => new Claim(x.Key, x.Value)).ToList();
+                List<Claim> claims = request.Claims.Select(x => new Claim(x.Key, x.Value)).ToList();
+
+                // Add the email address and role as claims
+                foreach (String requestRole in request.Roles)
+                {
+                    claims.Add(new Claim(JwtClaimTypes.Role, requestRole));
+                }
+                claims.Add(new Claim(JwtClaimTypes.Email, request.EmailAddress));
+
                 addClaimsResult = await this.UserManager.AddClaimsAsync(newIdentityUser, claims);
 
                 if (!addClaimsResult.Succeeded)
