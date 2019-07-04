@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace OAuth2SecurityService.IntegrationTests.Role
+namespace SecurityService.IntegrationTests.Role
 {
     using TechTalk.SpecFlow;
     
@@ -18,17 +18,17 @@ namespace OAuth2SecurityService.IntegrationTests.Role
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [Xunit.TraitAttribute("Category", "role")]
-    public partial class CreateRoleFeature : Xunit.IClassFixture<CreateRoleFeature.FixtureData>, System.IDisposable
+    public partial class GetRoleFeature : Xunit.IClassFixture<GetRoleFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "CreateRole.feature"
+#line 1 "GetRole.feature"
 #line hidden
         
-        public CreateRoleFeature(CreateRoleFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public GetRoleFeature(GetRoleFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -37,8 +37,8 @@ namespace OAuth2SecurityService.IntegrationTests.Role
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Create Role", "\tIn order to use the OAuth2 Security Service\r\n\tAs an administrator\r\n\tI want to be" +
-                    " able to create roles", ProgrammingLanguage.CSharp, new string[] {
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Get Role", "\tIn order to use the OAuth2 Security Service\r\n\tAs an administrator\r\n\tI want to be" +
+                    " able to retrieve roles", ProgrammingLanguage.CSharp, new string[] {
                         "role"});
             testRunner.OnFeatureStart(featureInfo);
         }
@@ -87,25 +87,23 @@ namespace OAuth2SecurityService.IntegrationTests.Role
             this.ScenarioTearDown();
         }
         
-        [Xunit.FactAttribute(DisplayName="Create a Role")]
-        [Xunit.TraitAttribute("FeatureTitle", "Create Role")]
-        [Xunit.TraitAttribute("Description", "Create a Role")]
-        public virtual void CreateARole()
+        [Xunit.FactAttribute(DisplayName="Get a Role By Name")]
+        [Xunit.TraitAttribute("FeatureTitle", "Get Role")]
+        [Xunit.TraitAttribute("Description", "Get a Role By Name")]
+        public virtual void GetARoleByName()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a Role", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get a Role By Name", null, ((string[])(null)));
 #line 10
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 7
 this.FeatureBackground();
 #line 11
- testRunner.Given("The details of a role I want to create", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("A role with then name \'TestRole\' has been created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 12
- testRunner.When("I request to create the role", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("I request to retrieve the role \'TestRole\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 13
- testRunner.Then("the role should be created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 14
- testRunner.And("the new role Id will be returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("the role details should be returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -117,12 +115,12 @@ this.FeatureBackground();
             
             public FixtureData()
             {
-                CreateRoleFeature.FeatureSetup();
+                GetRoleFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                CreateRoleFeature.FeatureTearDown();
+                GetRoleFeature.FeatureTearDown();
             }
         }
     }

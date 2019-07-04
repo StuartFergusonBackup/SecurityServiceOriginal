@@ -73,13 +73,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OAuth2SecurityService.DataTransferObjects\OAuth2SecurityService.DataTransferObjects.csproj" />
-    <ProjectReference Include="..\OAuth2SecurityService.Manager\OAuth2SecurityService.Manager.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Extensions\" />
     <Folder Include="Attributes\" />
     <Folder Include="Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SecurityService.DataTransferObjects\SecurityService.DataTransferObjects.csproj" />
+    <ProjectReference Include="..\SecurityService.Manager\SecurityService.Manager.csproj" />
   </ItemGroup>
 </Project>

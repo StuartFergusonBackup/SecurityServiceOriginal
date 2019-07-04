@@ -15,11 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OAuth2SecurityService.DataTransferObjects\OAuth2SecurityService.DataTransferObjects.csproj" />
+    <Folder Include="Factories\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Factories\" />
+    <ProjectReference Include="..\SecurityService.DataTransferObjects\SecurityService.DataTransferObjects.csproj" />
   </ItemGroup>
 
 </Project>
