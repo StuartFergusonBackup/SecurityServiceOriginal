@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OAuth2SecurityService.Manager\OAuth2SecurityService.Manager.csproj" />
-    <ProjectReference Include="..\OAuth2SecurityService.Service\OAuth2SecurityService.Service.csproj" />
+    <ProjectReference Include="..\SecurityService.Manager\SecurityService.Manager.csproj" />
+    <ProjectReference Include="..\SecurityService.Service\SecurityService.Service.csproj" />
   </ItemGroup>
 
 </Project>

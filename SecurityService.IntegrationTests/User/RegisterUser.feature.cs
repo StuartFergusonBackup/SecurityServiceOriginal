@@ -10,25 +10,25 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace OAuth2SecurityService.IntegrationTests.GetToken
+namespace SecurityService.IntegrationTests.User
 {
     using TechTalk.SpecFlow;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.0.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [Xunit.TraitAttribute("Category", "gettoken")]
-    public partial class GetClientTokenFeature : Xunit.IClassFixture<GetClientTokenFeature.FixtureData>, System.IDisposable
+    [Xunit.TraitAttribute("Category", "user")]
+    public partial class RegisterUserFeature : Xunit.IClassFixture<RegisterUserFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "GetClientToken.feature"
+#line 1 "RegisterUser.feature"
 #line hidden
         
-        public GetClientTokenFeature(GetClientTokenFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public RegisterUserFeature(RegisterUserFeature.FixtureData fixtureData, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -37,9 +37,9 @@ namespace OAuth2SecurityService.IntegrationTests.GetToken
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "GetClientToken", "\tIn order to use the OAuth2 Security Service\r\n\tAs a user\r\n\tI want to be able to r" +
-                    "equest a Client Token", ProgrammingLanguage.CSharp, new string[] {
-                        "gettoken"});
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Register User", "\tIn order to use the OAuth2 Security Service\r\n\tAs a user\r\n\tI want to be able to r" +
+                    "egister my details", ProgrammingLanguage.CSharp, new string[] {
+                        "user"});
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -87,27 +87,29 @@ namespace OAuth2SecurityService.IntegrationTests.GetToken
             this.ScenarioTearDown();
         }
         
-        [Xunit.FactAttribute(DisplayName="Get Client Token")]
-        [Xunit.TraitAttribute("FeatureTitle", "GetClientToken")]
-        [Xunit.TraitAttribute("Description", "Get Client Token")]
-        public virtual void GetClientToken()
+        [Xunit.FactAttribute(DisplayName="Register with a password")]
+        [Xunit.TraitAttribute("FeatureTitle", "Register User")]
+        [Xunit.TraitAttribute("Description", "Register with a password")]
+        [Xunit.TraitAttribute("Category", "mytag")]
+        public virtual void RegisterWithAPassword()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get Client Token", null, ((string[])(null)));
-#line 10
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Register with a password", null, new string[] {
+                        "mytag"});
+#line 11
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 7
 this.FeatureBackground();
-#line 11
- testRunner.Given("I have the Client Id \'golfhandicap.testdatagenerator\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 12
- testRunner.And("the secret \'golfhandicap.testdatagenerator\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Given("I have my user details to register", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 13
- testRunner.When("I request a client token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("I have provided a password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 14
- testRunner.Then("my client token request is successful", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When("I register", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 15
- testRunner.And("a client token is returned to me", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("my details should be registered", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 16
+ testRunner.And("my new User Id will be returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -119,12 +121,12 @@ this.FeatureBackground();
             
             public FixtureData()
             {
-                GetClientTokenFeature.FeatureSetup();
+                RegisterUserFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                GetClientTokenFeature.FeatureTearDown();
+                RegisterUserFeature.FeatureTearDown();
             }
         }
     }

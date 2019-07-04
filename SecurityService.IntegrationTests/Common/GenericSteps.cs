@@ -60,7 +60,7 @@ namespace OAuth2SecurityService.IntegrationTests.Specflow.Common
                 .UseContainer()
                 .WithName(securityServiceContainerName)
                 .WithEnvironment("SeedingType=Development", "ASPNETCORE_ENVIRONMENT=IntegrationTest", messagingServiceAddress)
-                .UseImage("oauth2securityserviceservice")
+                .UseImage("securityserviceservice")
                 .ExposePort(5001)
                 .UseNetwork(this.TestNetwork)                    
                 .Mount($"D:\\temp\\docker\\{testFolder}", "/home", MountType.ReadWrite)                
