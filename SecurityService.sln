@@ -15,17 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecurityService.DataTransfe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecurityService.UnitTests", "SecurityService.UnitTests\SecurityService.UnitTests.csproj", "{BAAC4343-4F17-4B3C-80F0-DA7BB647180C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BaseDockerImage", "BaseDockerImage", "{DF53B516-6D33-4F46-9A63-ADA891F3C602}"
-	ProjectSection(SolutionItems) = preProject
-		SecurityService.Docker.BaseImage\CreateAuthenticationDatabase.sql = SecurityService.Docker.BaseImage\CreateAuthenticationDatabase.sql
-		SecurityService.Docker.BaseImage\CreateConfigurationDatabase.sql = SecurityService.Docker.BaseImage\CreateConfigurationDatabase.sql
-		SecurityService.Docker.BaseImage\CreatePersistedGrantStoreDatabase.sql = SecurityService.Docker.BaseImage\CreatePersistedGrantStoreDatabase.sql
-		SecurityService.Docker.BaseImage\Dockerfile = SecurityService.Docker.BaseImage\Dockerfile
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecurityService.IntegrationTests", "SecurityService.IntegrationTests\SecurityService.IntegrationTests.csproj", "{1F62F6C0-B5A3-456F-8F65-B37AA8BA6F05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClientUserInterface", "TestClientUserInterface\TestClientUserInterface.csproj", "{4FD0B4FA-5ED5-42E4-B58D-4B1CFE091FC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestClientUserInterface", "TestClientUserInterface\TestClientUserInterface.csproj", "{4FD0B4FA-5ED5-42E4-B58D-4B1CFE091FC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
