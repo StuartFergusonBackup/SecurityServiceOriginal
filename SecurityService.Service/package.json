@@ -4,6 +4,10 @@
   "private": true,
   "devDependencies": {
     "gulp": "3.9.1",
-    "gulp-less": "3.3.0"
+    "gulp-less": "3.3.0",
+    "minimatch": ">=3.0.2",
+    "cryptiles": ">=4.1.2",
+    "lodash": ">=4.17.11",
+    "hoek": ">=4.2.1"
   }
 }
