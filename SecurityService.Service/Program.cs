@@ -1,16 +1,16 @@
-﻿using System;
-using System.IO;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Shared.General;
-
-namespace OAuth2SecurityService.Service
+﻿namespace SecurityService.Service
 {
+    using System;
+    using System.IO;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Shared.General;
+
     public class Program
     {
         public static void Main(String[] args)
         {
-            var host = BuildWebHost(args);
+            var host = Program.BuildWebHost(args);
 
             try
             {

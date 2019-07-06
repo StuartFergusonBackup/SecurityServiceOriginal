@@ -1,7 +1,7 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-namespace OAuth2SecurityService.Service.Controllers.Account
+namespace SecurityService.Service.Controllers.Account
 {
     using System;
     using System.Linq;
@@ -13,16 +13,15 @@ namespace OAuth2SecurityService.Service.Controllers.Account
     using IdentityServer4.Events;
     using IdentityServer4.Extensions;
     using IdentityServer4.Models;
-    using IdentityServer4.Quickstart.UI;
     using IdentityServer4.Services;
     using IdentityServer4.Stores;
-    using IdentityServer4.Test;
     using Manager;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Models.Account;
 
     /// <summary>
     /// This sample controller implements a typical login/logout/provision workflow for local and external accounts.

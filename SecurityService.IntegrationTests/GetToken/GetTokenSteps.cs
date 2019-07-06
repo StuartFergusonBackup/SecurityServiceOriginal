@@ -1,19 +1,18 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using OAuth2SecurityService.IntegrationTests.Specflow.Common;
-using Shouldly;
-using TechTalk.SpecFlow;
-
-namespace OAuth2SecurityService.IntegrationTests.Specflow
+﻿namespace SecurityService.IntegrationTests.GetToken
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Common;
     using DataTransferObjects;
+    using Newtonsoft.Json;
+    using Shouldly;
+    using TechTalk.SpecFlow;
 
     [Binding]
     [Scope(Tag = "gettoken")]
@@ -27,13 +26,13 @@ namespace OAuth2SecurityService.IntegrationTests.Specflow
         [Given(@"the Security Service is running")]
         public void GivenTheSecurityServiceIsRunning()
         {
-            RunSystem(this.ScenarioContext.ScenarioInfo.Title);
+            this.RunSystem(this.ScenarioContext.ScenarioInfo.Title);
         }
 
         [AfterScenario()]
         public void AfterScenario()
         {
-            StopSystem();
+            this.StopSystem();
         }
         
         [Given(@"I have the Client Id '(.*)'")]
@@ -91,25 +90,29 @@ namespace OAuth2SecurityService.IntegrationTests.Specflow
             responseData.TokenType.ShouldBe("bearer", StringCompareShould.IgnoreCase);
         }
 
-        [Given(@"the user '(.*)' is registered with the password '(.*)'")]
-        public async Task GivenTheUserIsRegisteredWithThePassword(string userName, String password)
+        [Given(@"I have a user registered with the following details")]
+        public async Task GivenIHaveAUserRegisteredWithTheFollowingDetails(Table table)
         {
+            TableRow userDetails = table.Rows.First();
+
             RegisterUserRequest request = new RegisterUserRequest
-                          {
-                              Claims = new Dictionary<String, String>()
-                                       {
-                                           {"Claim1", "Claim1Value"},
-                                           {"Claim2", "Claim2Value"}
-                                       },
-            EmailAddress = userName,
-                              Password = password,
-                              PhoneNumber = "07777777777",
-                              Roles = new List<String>
-                                      {
-                                          "Club Administrator"
-                                      },
-            };
-            
+                                          {
+                                              Claims = new Dictionary<String, String>()
+                                                       {
+                                                           {"Claim1", "Claim1Value"},
+                                                           {"Claim2", "Claim2Value"}
+                                                       },
+                                              EmailAddress = userDetails["UserName"],
+                                              Password = userDetails["Password"],
+                                              FamilyName = userDetails["FamilyName"],
+                                              GivenName = userDetails["GivenName"],
+                                              PhoneNumber = "07777777777",
+                                              Roles = new List<String>
+                                                      {
+                                                          "Club Administrator"
+                                                      },
+                                          };
+
             String requestSerialised = JsonConvert.SerializeObject(request);
             StringContent content = new StringContent(requestSerialised, Encoding.UTF8, "application/json");
 
@@ -122,7 +125,7 @@ namespace OAuth2SecurityService.IntegrationTests.Specflow
                 response.StatusCode.ShouldBe(HttpStatusCode.OK);
             }
         }
-        
+
         [Given(@"the username '(.*)'")]
         public void GivenTheUsername(String username)
         {

@@ -1,4 +1,4 @@
-namespace OAuth2SecurityService.Service.Controllers.Account
+namespace SecurityService.Service.Controllers.Account
 {
     using System;
     using System.Collections.Generic;
@@ -12,16 +12,15 @@ namespace OAuth2SecurityService.Service.Controllers.Account
     using IdentityModel;
     using IdentityServer4.Events;
     using IdentityServer4.Models;
-    using IdentityServer4.Quickstart.UI;
     using IdentityServer4.Services;
     using IdentityServer4.Stores;
-    using IdentityServer4.Test;
     using Manager;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Models.Account;
 
     [SecurityHeaders]
     [AllowAnonymous]

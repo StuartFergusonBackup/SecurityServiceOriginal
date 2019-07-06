@@ -1,9 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-
-namespace OAuth2SecurityService.Manager.Services
+﻿namespace SecurityService.Manager.Services
 {
-    using System.Reflection.Metadata;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public interface IMessagingService
     {

@@ -1,4 +1,4 @@
-﻿namespace OAuth2SecurityService.Service.Controllers
+﻿namespace SecurityService.Service.Controllers
 {
     using System;
     using System.Threading;

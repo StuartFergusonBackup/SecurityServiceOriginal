@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace OAuth2SecurityService.DataTransferObjects
+﻿namespace SecurityService.DataTransferObjects
 {
+    using System;
+
     public class RegisterUserResponse
     {
         /// <summary>

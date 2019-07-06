@@ -3,7 +3,7 @@
 
 
 
-namespace IdentityServer4.Quickstart.UI
+namespace SecurityService.Service.Models.Account
 {
     public class RedirectViewModel
     {

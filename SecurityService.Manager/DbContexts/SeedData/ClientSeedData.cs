@@ -1,9 +1,8 @@
-﻿namespace OAuth2SecurityService.Manager.DbContexts.SeedData
+﻿namespace SecurityService.Manager.DbContexts.SeedData
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using IdentityModel.Client;
     using IdentityServer4;
     using IdentityServer4.Models;
 

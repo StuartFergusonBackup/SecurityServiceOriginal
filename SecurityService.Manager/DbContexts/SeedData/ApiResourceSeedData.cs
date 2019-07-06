@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using IdentityServer4.Models;
-using Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal;
-
-namespace OAuth2SecurityService.Manager.DbContexts.SeedData
+﻿namespace SecurityService.Manager.DbContexts.SeedData
 {
+    using System;
+    using System.Collections.Generic;
+    using IdentityServer4.Models;
+
     public class ApiResourceSeedData
     {
         #region public static List<ApiResource> GetApiResources(SeedingType seedingType)        

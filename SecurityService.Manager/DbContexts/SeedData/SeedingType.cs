@@ -1,4 +1,4 @@
-﻿namespace OAuth2SecurityService.Manager.DbContexts.SeedData
+﻿namespace SecurityService.Manager.DbContexts.SeedData
 {
     public enum SeedingType
     {

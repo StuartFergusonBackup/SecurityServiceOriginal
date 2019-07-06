@@ -1,14 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
-using IdentityServer4.Extensions;
-using Microsoft.AspNetCore.Identity;
-
-namespace OAuth2SecurityService.Service
+namespace SecurityService.Manager
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using IdentityServer4.Extensions;
+    using Microsoft.AspNetCore.Identity;
+
     public class InMemoryUserStore : IUserStore<IdentityUser>, 
         IUserPasswordStore<IdentityUser>, 
         IUserRoleStore<IdentityUser>,

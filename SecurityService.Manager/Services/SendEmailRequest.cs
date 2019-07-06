@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace OAuth2SecurityService.Manager.Services
+﻿namespace SecurityService.Manager.Services
 {
+    using System;
+    using System.Collections.Generic;
+
     public class SendEmailRequest
     {
         /// <summary>

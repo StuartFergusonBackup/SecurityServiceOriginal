@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
-using IdentityServer4.EntityFramework.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
-using MockQueryable.Moq;
-using Moq;
-using OAuth2SecurityService.Manager;
-using OAuth2SecurityService.Manager.Services;
-
-namespace OAuth2SecurityService.UnitTests
+﻿namespace SecurityService.UnitTests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using IdentityServer4.EntityFramework.Interfaces;
+    using Manager;
+    using Manager.Services;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Logging.Abstractions;
+    using Microsoft.Extensions.Options;
+    using MockQueryable.Moq;
+    using Moq;
 
     public partial class SecurityServiceManagerTests
     {
@@ -455,37 +454,37 @@ namespace OAuth2SecurityService.UnitTests
 
         private void SetupErrorDescriber()
         {
-            ErrorDescriber.Setup(e => e.PasswordMismatch()).Returns(new IdentityError
+            this.ErrorDescriber.Setup(e => e.PasswordMismatch()).Returns(new IdentityError
             {
                 Code = "1",
                 Description = "Password Mismatch"
             });
-            ErrorDescriber.Setup(e => e.InvalidToken()).Returns(new IdentityError
+            this.ErrorDescriber.Setup(e => e.InvalidToken()).Returns(new IdentityError
             {
                 Code = "2",
                 Description = "Invalid Token"
             });
-            ErrorDescriber.Setup(e => e.LoginAlreadyAssociated()).Returns(new IdentityError
+            this.ErrorDescriber.Setup(e => e.LoginAlreadyAssociated()).Returns(new IdentityError
             {
                 Code = "3",
                 Description = "Login Already Associated"
             });
-            ErrorDescriber.Setup(e => e.UserAlreadyInRole(It.IsAny<String>())).Returns(new IdentityError
+            this.ErrorDescriber.Setup(e => e.UserAlreadyInRole(It.IsAny<String>())).Returns(new IdentityError
             {
                 Code = "4",
                 Description = "User Already In Role"
             });
-            ErrorDescriber.Setup(e => e.UserNotInRole(It.IsAny<String>())).Returns(new IdentityError
+            this.ErrorDescriber.Setup(e => e.UserNotInRole(It.IsAny<String>())).Returns(new IdentityError
             {
                 Code = "5",
                 Description = "User Not In Role"
             });
-            ErrorDescriber.Setup(e => e.UserLockoutNotEnabled()).Returns(new IdentityError
+            this.ErrorDescriber.Setup(e => e.UserLockoutNotEnabled()).Returns(new IdentityError
             {
                 Code = "6",
                 Description = "User Lockout Not Enabled"
             });
-            ErrorDescriber.Setup(e => e.RecoveryCodeRedemptionFailed()).Returns(new IdentityError
+            this.ErrorDescriber.Setup(e => e.RecoveryCodeRedemptionFailed()).Returns(new IdentityError
             {
                 Code = "7",
                 Description = "Recovery Code Redemption Failed"
@@ -517,24 +516,24 @@ namespace OAuth2SecurityService.UnitTests
 
         private SecurityServiceManager SetupSecurityServiceManager(TestScenario testScenario)
         {
-            SetupPasswordHasher(testScenario);
+            this.SetupPasswordHasher(testScenario);
 
-            SetupUserStore(testScenario);
-            SetupQueryableUserStore(testScenario);
-            SetupUserRoleStore(testScenario);
-            SetupUserClaimStore(testScenario);
-            SetupUserPasswordStore(testScenario);
-            SetupUserSecurityStampStore(testScenario);
-            SetupUserEmailStore(testScenario);
+            this.SetupUserStore(testScenario);
+            this.SetupQueryableUserStore(testScenario);
+            this.SetupUserRoleStore(testScenario);
+            this.SetupUserClaimStore(testScenario);
+            this.SetupUserPasswordStore(testScenario);
+            this.SetupUserSecurityStampStore(testScenario);
+            this.SetupUserEmailStore(testScenario);
 
-            SetupPasswordValidatiors(testScenario);
-            SetupUserValidators(testScenario);
+            this.SetupPasswordValidatiors(testScenario);
+            this.SetupUserValidators(testScenario);
 
-            SetupServiceProvider(testScenario);
+            this.SetupServiceProvider(testScenario);
 
-            SetupErrorDescriber();
+            this.SetupErrorDescriber();
 
-            SetupRoleStore(testScenario);
+            this.SetupRoleStore(testScenario);
 
             IdentityOptions identityOptions = new IdentityOptions();
             identityOptions.Tokens.ProviderMap.Add("Default",
@@ -545,7 +544,7 @@ namespace OAuth2SecurityService.UnitTests
             UserManager<IdentityUser> userManager =
                 new UserManager<IdentityUser>(this.UserStore.Object, options.Object, this.PasswordHasher.Object,
                     this.UserValidators, this.PasswordValidators,
-                    null, ErrorDescriber.Object, ServiceProvider.Object, new NullLogger<UserManager<IdentityUser>>());
+                    null, this.ErrorDescriber.Object, this.ServiceProvider.Object, new NullLogger<UserManager<IdentityUser>>());
 
             RoleManager<IdentityRole> roleManager =
                 new RoleManager<IdentityRole>(this.RoleStore.Object, null, null, null, null);

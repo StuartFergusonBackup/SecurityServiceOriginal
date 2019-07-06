@@ -1,8 +1,8 @@
-﻿using System;
-using System.Net;
-
-namespace OAuth2SecurityService.Manager.Services
+﻿namespace SecurityService.Manager.Services
 {
+    using System;
+    using System.Net;
+
     public class SendEmailResponse
     {
         /// <summary>

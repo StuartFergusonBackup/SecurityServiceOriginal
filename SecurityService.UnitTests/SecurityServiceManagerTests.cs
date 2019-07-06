@@ -1,4 +1,4 @@
-﻿namespace OAuth2SecurityService.UnitTests
+﻿namespace SecurityService.UnitTests
 {
     using System;
     using System.Threading;
@@ -105,12 +105,18 @@
         }
 
         [Theory]
-        [InlineData(true, "emailaddress", false, false, typeof(ArgumentNullException))]
-        [InlineData(false, null, false, false, typeof(ArgumentNullException))]
-        [InlineData(false, "", false, false, typeof(ArgumentNullException))]
-        [InlineData(false, "", true, false, typeof(ArgumentNullException))]
-        [InlineData(false, "", false, true, typeof(ArgumentNullException))]
+        [InlineData(true, "givenname", "familyname", "emailaddress", false, false, typeof(ArgumentNullException))]
+        [InlineData(true, null, "familyname", "emailaddress", false, false, typeof(ArgumentNullException))]
+        [InlineData(true, "", "familyname", "emailaddress", false, false, typeof(ArgumentNullException))]
+        [InlineData(true, "givenname", null, "emailaddress", false, false, typeof(ArgumentNullException))]
+        [InlineData(true, "givenname", "", "emailaddress", false, false, typeof(ArgumentNullException))]
+        [InlineData(false, "givenname", "familyname", null, false, false, typeof(ArgumentNullException))]
+        [InlineData(false, "givenname", "familyname", "", false, false, typeof(ArgumentNullException))]
+        [InlineData(false, "givenname", "familyname", "", true, false, typeof(ArgumentNullException))]
+        [InlineData(false, "givenname", "familyname", "", false, true, typeof(ArgumentNullException))]
         public void SecurityServiceManager_RegisterUser_InvalidRequest_ErrorThrown(Boolean nullRequest,
+                                                                                   String givenName,
+                                                                                   String familyName,
                                                                                    String emailAddress,
                                                                                    Boolean nullClaims,
                                                                                    Boolean nullRoles,
@@ -125,6 +131,8 @@
                 request = new RegisterUserRequest
                           {
                               Claims = nullClaims ? null : SecurityServiceManagerTestData.Claims,
+                              GivenName = givenName,
+                              FamilyName = familyName,
                               EmailAddress = emailAddress,
                               Password = SecurityServiceManagerTestData.Password,
                               PhoneNumber = SecurityServiceManagerTestData.PhoneNumber,
@@ -147,7 +155,7 @@
             RegisterUserRequest request = SecurityServiceManagerTestData.GetRegisterUserRequest;
             request.Password = password;
 
-            var response = await securityServiceManager.RegisterUser(request, CancellationToken.None);
+            RegisterUserResponse response = await securityServiceManager.RegisterUser(request, CancellationToken.None);
 
             response.ShouldNotBeNull();
             response.UserId.ShouldNotBe(Guid.Empty);

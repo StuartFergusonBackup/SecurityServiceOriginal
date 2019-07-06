@@ -1,4 +1,4 @@
-﻿namespace OAuth2SecurityService.Manager
+﻿namespace SecurityService.Manager
 {
     using System;
     using System.Collections.Generic;

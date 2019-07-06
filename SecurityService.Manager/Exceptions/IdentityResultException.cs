@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
-
-namespace OAuth2SecurityService.Manager.Exceptions
+﻿namespace SecurityService.Manager.Exceptions
 {
+    using System;
+    using System.Linq;
+    using System.Text;
+    using Microsoft.AspNetCore.Identity;
+
     public class IdentityResultException : Exception
     {
         #region Public Properties

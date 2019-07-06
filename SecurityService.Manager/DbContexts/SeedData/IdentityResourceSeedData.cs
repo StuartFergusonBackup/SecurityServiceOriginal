@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using IdentityModel;
-using IdentityServer4;
-using IdentityServer4.EntityFramework.Entities;
-using IdentityResource = IdentityServer4.Models.IdentityResource;
-
-namespace OAuth2SecurityService.Manager.DbContexts.SeedData
+﻿namespace SecurityService.Manager.DbContexts.SeedData
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using IdentityModel;
+    using IdentityServer4;
+    using IdentityServer4.EntityFramework.Entities;
+    using IdentityResource = IdentityServer4.Models.IdentityResource;
+
     /// <summary>
     /// 
     /// </summary>
@@ -54,7 +54,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
         {
             //List<IdentityResource> identityResources = new List<IdentityResource>();
 
-            var g = ScopeToClaimsMapping[IdentityServerConstants.StandardScopes.OpenId];
+            var g = IdentityResourceSeedData.ScopeToClaimsMapping[IdentityServerConstants.StandardScopes.OpenId];
 
             return new List<IdentityResource>
             {
@@ -63,7 +63,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
                     Name = IdentityServerConstants.StandardScopes.OpenId,
                     DisplayName = "Your user identifier",
                     Required = true,
-                    UserClaims = ScopeToClaimsMapping[IdentityServerConstants.StandardScopes.OpenId].Select(x => x.Type).ToList()
+                    UserClaims = IdentityResourceSeedData.ScopeToClaimsMapping[IdentityServerConstants.StandardScopes.OpenId].Select(x => x.Type).ToList()
                 },
                 new IdentityResource()
                 {
@@ -71,7 +71,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
                     DisplayName = "User profile",
                     Description = "Your user profile information (first name, last name, etc.)",
                     Emphasize = true,
-                    UserClaims = ScopeToClaimsMapping[IdentityServerConstants.StandardScopes.Profile].Select(x => x.Type).ToList()
+                    UserClaims = IdentityResourceSeedData.ScopeToClaimsMapping[IdentityServerConstants.StandardScopes.Profile].Select(x => x.Type).ToList()
                 },
                 new IdentityResource()
                 {
@@ -79,7 +79,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
                     DisplayName = "Email",
                     Description = "Email and Email Verified Flags",
                     Emphasize = true,
-                    UserClaims = ScopeToClaimsMapping[IdentityServerConstants.StandardScopes.Email].Select(x => x.Type).ToList()
+                    UserClaims = IdentityResourceSeedData.ScopeToClaimsMapping[IdentityServerConstants.StandardScopes.Email].Select(x => x.Type).ToList()
                 }
 
             };

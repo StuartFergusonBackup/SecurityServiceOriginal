@@ -1,22 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using IdentityServer4.EntityFramework.DbContexts;
-using IdentityServer4.EntityFramework.Services;
-using IdentityServer4.EntityFramework.Stores;
-using IdentityServer4.Models;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-using IdentityServer4.Test;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using OAuth2SecurityService.Manager.DbContexts.SeedData;
-
-namespace OAuth2SecurityService.Service
+namespace SecurityService.Service
 {
+    using System;
+    using System.Collections.Generic;
+    using IdentityServer4.EntityFramework.Services;
+    using IdentityServer4.EntityFramework.Stores;
+    using IdentityServer4.Services;
+    using IdentityServer4.Stores;
+    using Manager.DbContexts.SeedData;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.DependencyInjection;
+
     /// <summary>
     /// 
     /// </summary>

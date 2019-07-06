@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OAuth2SecurityService.DataTransferObjects;
-
-namespace OAuth2SecurityService.IntegrationTests.Specflow.Common
+﻿namespace SecurityService.IntegrationTests.Common
 {
+    using System;
+    using System.Collections.Generic;
+    using DataTransferObjects;
+
     public class IntegrationTestsTestData
     {
         public static String Password = "123456";
@@ -18,6 +15,8 @@ namespace OAuth2SecurityService.IntegrationTests.Specflow.Common
             {
                 RegisterUserRequest request = new RegisterUserRequest();
 
+                request.GivenName = "test";
+                request.FamilyName = "user";
                 request.EmailAddress = "testemail1@testing.co.uk";
                 request.PhoneNumber = "07777777777";
                 request.Roles = new List<String>

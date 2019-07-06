@@ -80,6 +80,19 @@ namespace SecurityService.IntegrationTests.GetToken
 #line 8
  testRunner.Given("the Security Service is running", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
+            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                        "UserName",
+                        "Password",
+                        "GivenName",
+                        "FamilyName"});
+            table1.AddRow(new string[] {
+                        "clubadministrator1@test.co.uk",
+                        "123456",
+                        "Admin",
+                        "User"});
+#line 9
+ testRunner.And("I have a user registered with the following details", ((string)(null)), table1, "And ");
+#line hidden
         }
         
         void System.IDisposable.Dispose()
@@ -93,27 +106,24 @@ namespace SecurityService.IntegrationTests.GetToken
         public virtual void GetPasswordToken()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get Password Token", null, ((string[])(null)));
-#line 10
+#line 13
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 7
 this.FeatureBackground();
-#line 11
- testRunner.Given("I have the Client Id \'developerClient\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 12
- testRunner.And("the secret \'developerClient\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 13
- testRunner.And("the user \'clubadministrator1@test.co.uk\' is registered with the password \'123456\'" +
-                    "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 14
- testRunner.And("the username \'clubadministrator1@test.co.uk\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Given("I have the Client Id \'developerClient\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 15
- testRunner.And("the password \'123456\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("the secret \'developerClient\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 16
- testRunner.When("I request a password token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.And("the username \'clubadministrator1@test.co.uk\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 17
- testRunner.Then("my password token request is successful", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("the password \'123456\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 18
+ testRunner.When("I request a password token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 19
+ testRunner.Then("my password token request is successful", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 20
  testRunner.And("a password token is returned to me", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();

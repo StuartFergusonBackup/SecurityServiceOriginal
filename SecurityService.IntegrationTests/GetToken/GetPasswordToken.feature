@@ -6,11 +6,13 @@ Feature: GetPasswordToken
 
 Background: 
 	Given the Security Service is running
+	And I have a user registered with the following details
+	| UserName                      | Password | GivenName | FamilyName |
+	| clubadministrator1@test.co.uk | 123456   | Admin     | User       |
 
 Scenario: Get Password Token
 	Given I have the Client Id 'developerClient'
 	And the secret 'developerClient'
-	And the user 'clubadministrator1@test.co.uk' is registered with the password '123456'
 	And the username 'clubadministrator1@test.co.uk'
 	And the password '123456'
 	When I request a password token
