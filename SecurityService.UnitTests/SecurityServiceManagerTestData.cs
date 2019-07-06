@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Text;
-using OAuth2SecurityService.DataTransferObjects;
-
-namespace OAuth2SecurityService.UnitTests
+﻿namespace SecurityService.UnitTests
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Security.Claims;
+    using DataTransferObjects;
+    using Microsoft.AspNetCore.Identity;
+
     public class SecurityServiceManagerTestData
     {
         public static String UserName = "00000001";
@@ -32,11 +31,14 @@ namespace OAuth2SecurityService.UnitTests
             {
                 RegisterUserRequest request = new RegisterUserRequest();
 
-                request.EmailAddress = EmailAddress;
-                request.Password = Password;
-                request.PhoneNumber = PhoneNumber;
-                request.Roles = Roles;
-                request.Claims = Claims;
+                request.GivenName = SecurityServiceManagerTestData.GivenName;
+                request.MiddleName = SecurityServiceManagerTestData.MiddleName;
+                request.FamilyName = SecurityServiceManagerTestData.FamilyName;
+                request.EmailAddress = SecurityServiceManagerTestData.EmailAddress;
+                request.Password = SecurityServiceManagerTestData.Password;
+                request.PhoneNumber = SecurityServiceManagerTestData.PhoneNumber;
+                request.Roles = SecurityServiceManagerTestData.Roles;
+                request.Claims = SecurityServiceManagerTestData.Claims;
 
                 return request;
             }
@@ -55,7 +57,7 @@ namespace OAuth2SecurityService.UnitTests
                 NormalizedUserName = "00000001",
                 Email = "00000001@testemail.com",
                 NormalizedEmail = "00000001@testemail.com",
-                Id = User1Id
+                Id = SecurityServiceManagerTestData.User1Id
             },
             new IdentityUser
             {
@@ -63,7 +65,7 @@ namespace OAuth2SecurityService.UnitTests
                 NormalizedUserName = "00000002",
                 Email = "00000002@testemail.com",
                 NormalizedEmail = "00000002@testemail.com",
-                Id = User2Id
+                Id = SecurityServiceManagerTestData.User2Id
             },
             new IdentityUser
             {
@@ -71,38 +73,43 @@ namespace OAuth2SecurityService.UnitTests
                 NormalizedUserName = "00000003",
                 Email = "00000003@testemail.com",
                 NormalizedEmail = "00000003@testemail.com",
-                Id = User3Id
+                Id = SecurityServiceManagerTestData.User3Id
             }
         };
 
         public static Dictionary<String, List<String>> UserRoles = new Dictionary<String, List<String>>
         {
-            {User1Id, new List<String>() {"Role1", "Role2"}},
-            {User2Id, new List<String>() {"Role3"}},
-            {User3Id, new List<String>() {"Role4"}},
+            {SecurityServiceManagerTestData.User1Id, new List<String>() {"Role1", "Role2"}},
+            {SecurityServiceManagerTestData.User2Id, new List<String>() {"Role3"}},
+            {SecurityServiceManagerTestData.User3Id, new List<String>() {"Role4"}},
         };
 
         public static Dictionary<String, List<Claim>> UserClaims = new Dictionary<String, List<Claim>>
         {
             {
-                User1Id, new List<Claim>()
+                SecurityServiceManagerTestData.User1Id, new List<Claim>()
                 {
                     new Claim("ClaimType1", "Value1")
                 }
             },
             {
-                User2Id, new List<Claim>()
+                SecurityServiceManagerTestData.User2Id, new List<Claim>()
                 {
                     new Claim("ClaimType1", "Value2")
                 }
             },
             {
-                User3Id, new List<Claim>()
+                SecurityServiceManagerTestData.User3Id, new List<Claim>()
                 {
                     new Claim("ClaimType1", "Value3")
                 }
             },
         };
+
+        private static String GivenName = "GivenName";
+
+        private static String MiddleName = "MiddleName";
+        private static String FamilyName = "FamilyName";
 
         public static CreateRoleRequest GetCreateRoleRequest
         {

@@ -1,10 +1,9 @@
-﻿
-using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
-
-namespace OAuth2SecurityService.Manager.DbContexts.SeedData
+﻿namespace SecurityService.Manager.DbContexts.SeedData
 {
+    using System;
+    using System.Collections.Generic;
+    using Microsoft.AspNetCore.Identity;
+
     /// <summary>
     /// 
     /// </summary>
@@ -21,7 +20,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
 
             if (seedingType == SeedingType.IntegrationTest)
             {
-                identityUserRoles.AddRange(SeedTestUserRoles());
+                identityUserRoles.AddRange(IdentityUserRoleSeedData.SeedTestUserRoles());
             }
 
             return identityUserRoles;

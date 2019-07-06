@@ -1,13 +1,13 @@
-﻿using System;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Shared.General;
-
-namespace OAuth2SecurityService.Manager.Services
+﻿namespace SecurityService.Manager.Services
 {
+    using System;
+    using System.Net.Http;
+    using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Newtonsoft.Json;
+    using Shared.General;
+
     public class MessagingService : ClientProxyBase, IMessagingService
     {
         #region Public Methods
@@ -36,7 +36,7 @@ namespace OAuth2SecurityService.Manager.Services
                 {  
                     var httpResponse  = await client.PostAsync("/api/Email", httpContent, CancellationToken.None);
                                   
-                    String content = await HandleResponse(httpResponse, cancellationToken);
+                    String content = await this.HandleResponse(httpResponse, cancellationToken);
 
                     response = JsonConvert.DeserializeObject<SendEmailResponse>(content);
                 }

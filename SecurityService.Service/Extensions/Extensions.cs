@@ -1,5 +1,6 @@
-namespace OAuth2SecurityService.Service.Extensions
+namespace SecurityService.Service.Extensions
 {
+    using System;
     using System.Threading.Tasks;
     using IdentityServer4.Stores;
 

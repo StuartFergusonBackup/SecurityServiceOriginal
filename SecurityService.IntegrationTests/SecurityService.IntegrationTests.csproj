@@ -29,6 +29,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="GetToken\GetPasswordToken.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GetPasswordToken.feature</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="GetToken\GetClientToken.feature">
       <Generator></Generator>
     </None>
@@ -43,6 +51,7 @@
     </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="GetToken\GetPasswordToken.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GetPasswordToken.feature.cs</LastGenOutput>
     </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Role\CreateRole.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

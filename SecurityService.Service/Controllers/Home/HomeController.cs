@@ -1,16 +1,16 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-namespace OAuth2SecurityService.Service.Controllers.Home
+namespace SecurityService.Service.Controllers.Home
 {
     using System.Threading.Tasks;
     using Attributes;
-    using IdentityServer4.Quickstart.UI;
     using IdentityServer4.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+    using Models.Home;
 
     [SecurityHeaders]
     [AllowAnonymous]

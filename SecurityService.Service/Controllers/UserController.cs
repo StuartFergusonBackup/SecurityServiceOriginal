@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using OAuth2SecurityService.DataTransferObjects;
-using OAuth2SecurityService.Manager;
-
-namespace OAuth2SecurityService.Service.Controllers
+﻿namespace SecurityService.Service.Controllers
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+    using DataTransferObjects;
+    using Manager;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -23,7 +19,8 @@ namespace OAuth2SecurityService.Service.Controllers
 
         #endregion
 
-        #region Constructors        
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class.
         /// </summary>
@@ -32,11 +29,11 @@ namespace OAuth2SecurityService.Service.Controllers
         {
             this.Manager = manager;
         }
+
         #endregion
 
-        #region Public Methods
+        #region Methods
 
-        #region public async Task<IActionResult> PostUser([FromBody]RegisterUserRequest request, CancellationToken cancellationToken)        
         /// <summary>
         /// Posts the user.
         /// </summary>
@@ -44,13 +41,13 @@ namespace OAuth2SecurityService.Service.Controllers
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> PostUser([FromBody]RegisterUserRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> PostUser([FromBody] RegisterUserRequest request,
+                                                  CancellationToken cancellationToken)
         {
-            var result = await this.Manager.RegisterUser(request, cancellationToken);
+            RegisterUserResponse result = await this.Manager.RegisterUser(request, cancellationToken);
 
             return this.Ok(result);
         }
-        #endregion
 
         #endregion
     }

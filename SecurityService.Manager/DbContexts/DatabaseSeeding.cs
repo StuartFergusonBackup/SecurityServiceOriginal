@@ -1,14 +1,12 @@
-using System;
-using System.Linq;
-using IdentityServer4.EntityFramework.DbContexts;
-using IdentityServer4.EntityFramework.Mappers;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using OAuth2SecurityService.Manager.DbContexts.SeedData;
-
-namespace OAuth2SecurityService.Manager.DbContexts
+namespace SecurityService.Manager.DbContexts
 {
+    using System;
+    using System.Linq;
     using System.Threading;
+    using IdentityServer4.EntityFramework.DbContexts;
+    using IdentityServer4.EntityFramework.Mappers;
+    using Microsoft.EntityFrameworkCore;
+    using SeedData;
 
     public class DatabaseSeeding
     {
@@ -61,9 +59,9 @@ namespace OAuth2SecurityService.Manager.DbContexts
                         authenticationDbContext.Database.Migrate();
                     }
 
-                    AddRoles(authenticationDbContext, seedingType);
-                    AddUsers(authenticationDbContext, seedingType);
-                    AddUsersToRoles(authenticationDbContext, seedingType);
+                    DatabaseSeeding.AddRoles(authenticationDbContext, seedingType);
+                    DatabaseSeeding.AddUsers(authenticationDbContext, seedingType);
+                    DatabaseSeeding.AddUsersToRoles(authenticationDbContext, seedingType);
 
                     authenticationDbContext.SaveChanges();
 
@@ -100,9 +98,9 @@ namespace OAuth2SecurityService.Manager.DbContexts
                         configurationDbContext.Database.Migrate();
                     }
 
-                    AddClients(configurationDbContext, seedingType);
-                    AddApiResources(configurationDbContext, seedingType);
-                    AddIdentityResources(configurationDbContext, seedingType);
+                    DatabaseSeeding.AddClients(configurationDbContext, seedingType);
+                    DatabaseSeeding.AddApiResources(configurationDbContext, seedingType);
+                    DatabaseSeeding.AddIdentityResources(configurationDbContext, seedingType);
 
                     configurationDbContext.SaveChanges();
 

@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-
-namespace OAuth2SecurityService.Manager.DbContexts
+namespace SecurityService.Manager.DbContexts
 {
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore;
+
     /// <summary>
     /// 
     /// </summary>

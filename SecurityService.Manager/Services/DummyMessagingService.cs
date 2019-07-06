@@ -1,4 +1,4 @@
-﻿namespace OAuth2SecurityService.Manager.Services
+﻿namespace SecurityService.Manager.Services
 {
     using System;
     using System.Net;

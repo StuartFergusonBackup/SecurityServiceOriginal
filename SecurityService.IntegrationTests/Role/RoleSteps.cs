@@ -1,4 +1,4 @@
-﻿namespace OAuth2SecurityService.IntegrationTests.Specflow.Role
+﻿namespace SecurityService.IntegrationTests.Role
 {
     using System;
     using System.Net;

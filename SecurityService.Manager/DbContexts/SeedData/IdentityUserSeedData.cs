@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using IdentityServer4.Test;
-using Microsoft.AspNetCore.Identity;
-
-namespace OAuth2SecurityService.Manager.DbContexts.SeedData
+﻿namespace SecurityService.Manager.DbContexts.SeedData
 {
+    using System.Collections.Generic;
+    using Microsoft.AspNetCore.Identity;
+
     public class IdentityUserSeedData
     {
         public static List<IdentityUser> GetIdentityUsers(SeedingType seedingType)
@@ -13,7 +11,7 @@ namespace OAuth2SecurityService.Manager.DbContexts.SeedData
 
             if (seedingType == SeedingType.IntegrationTest)
             {
-                identityUsers.AddRange(SeedTestUsers());
+                identityUsers.AddRange(IdentityUserSeedData.SeedTestUsers());
             }
 
             return identityUsers;

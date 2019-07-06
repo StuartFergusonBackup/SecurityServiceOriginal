@@ -1,4 +1,4 @@
-﻿namespace OAuth2SecurityService.Manager
+﻿namespace SecurityService.Manager
 {
     using System;
     using System.Collections.Generic;
@@ -18,7 +18,7 @@
     /// <summary>
     /// 
     /// </summary>
-    /// <seealso cref="OAuth2SecurityService.Manager.ISecurityServiceManager" />
+    /// <seealso cref="ISecurityServiceManager" />
     public class SecurityServiceManager : ISecurityServiceManager
     {
         #region Fields
@@ -280,7 +280,15 @@
                 {
                     claims.Add(new Claim(JwtClaimTypes.Role, requestRole));
                 }
+
                 claims.Add(new Claim(JwtClaimTypes.Email, request.EmailAddress));
+                claims.Add(new Claim(JwtClaimTypes.GivenName, request.GivenName));
+                claims.Add(new Claim(JwtClaimTypes.FamilyName, request.FamilyName));
+
+                if (string.IsNullOrEmpty(request.MiddleName) == false)
+                {
+                    claims.Add(new Claim(JwtClaimTypes.MiddleName, request.MiddleName));
+                }
 
                 addClaimsResult = await this.UserManager.AddClaimsAsync(newIdentityUser, claims);
 
@@ -402,6 +410,8 @@
             Guard.ThrowIfNullOrEmpty(request.PhoneNumber, typeof(ArgumentNullException), "RegisterUserRequest Phone Number cannot be null or empty");
             Guard.ThrowIfNull(request.Claims, typeof(ArgumentNullException), "RegisterUserRequest Claims cannot be null or empty");
             Guard.ThrowIfNull(request.Roles, typeof(ArgumentNullException), "RegisterUserRequest Roles cannot be null or empty");
+            Guard.ThrowIfNullOrEmpty(request.GivenName, typeof(ArgumentNullException), "RegisterUserRequest Given Name cannot be null or empty");
+            Guard.ThrowIfNullOrEmpty(request.FamilyName, typeof(ArgumentNullException), "RegisterUserRequest Family Name cannot be null or empty");
         }
 
         /// <summary>

@@ -1,18 +1,17 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using OAuth2SecurityService.DataTransferObjects;
-using OAuth2SecurityService.IntegrationTests.Specflow.Common;
-using Shouldly;
-using TechTalk.SpecFlow;
-
-
-namespace OAuth2SecurityService.IntegrationTests.Specflow.User
+﻿namespace SecurityService.IntegrationTests.User
 {
+    using System;
+    using System.Net;
+    using System.Net.Http;
+    using System.Text;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Common;
+    using DataTransferObjects;
+    using Newtonsoft.Json;
+    using Shouldly;
+    using TechTalk.SpecFlow;
+
     [Binding]
     [Scope(Tag = "user")]
     public class UserSteps : GenericSteps
@@ -25,13 +24,13 @@ namespace OAuth2SecurityService.IntegrationTests.Specflow.User
         [Given(@"the Security Service is running")]
         public void GivenTheSecurityServiceIsRunning()
         {
-            RunSystem(this.ScenarioContext.ScenarioInfo.Title);
+            this.RunSystem(this.ScenarioContext.ScenarioInfo.Title);
         }
 
         [AfterScenario()]
         public void AfterScenario()
         {
-            StopSystem();
+            this.StopSystem();
         }
 
         [Given(@"I have my user details to register")]

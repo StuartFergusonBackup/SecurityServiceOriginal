@@ -1,4 +1,4 @@
-﻿namespace OAuth2SecurityService.DataTransferObjects
+﻿namespace SecurityService.DataTransferObjects
 {
     using System;
 

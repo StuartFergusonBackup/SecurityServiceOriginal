@@ -1,9 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace OAuth2SecurityService.Manager.Migrations.ConfigurationDbContext
+﻿namespace SecurityService.Manager.Migrations.ConfigurationDbContext
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Metadata;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class InitialDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

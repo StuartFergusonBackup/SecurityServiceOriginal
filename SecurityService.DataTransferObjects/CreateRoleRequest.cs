@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OAuth2SecurityService.DataTransferObjects
+﻿namespace SecurityService.DataTransferObjects
 {
+    using System;
+
     public class CreateRoleRequest
     {
         /// <summary>

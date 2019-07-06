@@ -1,26 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Moq;
-using OAuth2SecurityService.Service;
-using StructureMap;
-using Xunit;
-
-namespace OAuth2SecurityService.UnitTests
+﻿namespace SecurityService.UnitTests
 {
+    using System;
+    using System.Collections.Generic;
+    using IdentityServer4.Services;
+    using IdentityServer4.Stores;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.DataProtection;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
+    using Moq;
+    using Service;
+    using StructureMap;
+    using Xunit;
+
     public class BootstrapperTests
     {
         [Fact]
@@ -30,11 +30,11 @@ namespace OAuth2SecurityService.UnitTests
             Mock<IHostingEnvironment> hostingEnvironment = new Mock<IHostingEnvironment>();
             hostingEnvironment.Setup(he => he.EnvironmentName).Returns("Development");
 
-            Startup.Configuration = SetupMemoryConfiguration();
+            Startup.Configuration = this.SetupMemoryConfiguration();
 
             IContainer container = Startup.GetConfiguredContainer(servicesCollection, hostingEnvironment.Object);
 
-            AddTestRegistrations(container);
+            this.AddTestRegistrations(container);
 
             container.AssertConfigurationIsValid();
         }
@@ -46,11 +46,11 @@ namespace OAuth2SecurityService.UnitTests
             Mock<IHostingEnvironment> hostingEnvironment = new Mock<IHostingEnvironment>();
             hostingEnvironment.Setup(he => he.EnvironmentName).Returns("Production");
 
-            Startup.Configuration = SetupMemoryConfiguration();
+            Startup.Configuration = this.SetupMemoryConfiguration();
 
             IContainer container = Startup.GetConfiguredContainer(servicesCollection, hostingEnvironment.Object);
 
-            AddTestRegistrations(container);
+            this.AddTestRegistrations(container);
 
             container.AssertConfigurationIsValid();
         }

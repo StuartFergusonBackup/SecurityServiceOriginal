@@ -1,8 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace OAuth2SecurityService.Manager.Migrations.PersistedGrantDbContext
+﻿namespace SecurityService.Manager.Migrations.PersistedGrantDbContext
 {
+    using System;
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class DbSchemaUpdate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -1,31 +1,28 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Threading.Tasks;
-using IdentityServer4.EntityFramework.DbContexts;
-using IdentityServer4.Services;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
-using OAuth2SecurityService.Manager;
-using OAuth2SecurityService.Manager.DbContexts;
-using OAuth2SecurityService.Manager.DbContexts.SeedData;
-using OAuth2SecurityService.Manager.Services;
-using Shared.General;
-using StructureMap;
-using Swashbuckle.AspNetCore.Swagger;
-
-namespace OAuth2SecurityService.Service
+﻿namespace SecurityService.Service
 {
+    using System;
+    using System.IO;
+    using System.Reflection;
+    using System.Threading.Tasks;
+    using IdentityServer4.EntityFramework.DbContexts;
+    using Manager;
+    using Manager.DbContexts;
+    using Manager.DbContexts.SeedData;
+    using Manager.Services;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.HttpOverrides;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+    using NLog.Extensions.Logging;
+    using Shared.General;
+    using StructureMap;
+    using Swashbuckle.AspNetCore.Swagger;
+
     /// <summary>
     /// 
     /// </summary>
@@ -84,9 +81,9 @@ namespace OAuth2SecurityService.Service
             Startup.HostingEnvironment = env;
 
             // Get the DB Connection Strings
-            PersistedGrantStoreConenctionString = Startup.Configuration.GetConnectionString(nameof(PersistedGrantDbContext));
-            ConfigurationConnectionString = Startup.Configuration.GetConnectionString(nameof(ConfigurationDbContext));
-            AuthenticationConenctionString = Startup.Configuration.GetConnectionString(nameof(AuthenticationDbContext));
+            Startup.PersistedGrantStoreConenctionString = Startup.Configuration.GetConnectionString(nameof(PersistedGrantDbContext));
+            Startup.ConfigurationConnectionString = Startup.Configuration.GetConnectionString(nameof(ConfigurationDbContext));
+            Startup.AuthenticationConenctionString = Startup.Configuration.GetConnectionString(nameof(AuthenticationDbContext));
         }
  
         #endregion
@@ -104,13 +101,13 @@ namespace OAuth2SecurityService.Service
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             String nlogConfigFilename = $"nlog.config";
-            if (String.Compare(HostingEnvironment.EnvironmentName, "Development", true) == 0)
+            if (String.Compare(Startup.HostingEnvironment.EnvironmentName, "Development", true) == 0)
             {
-                nlogConfigFilename = $"nlog.{HostingEnvironment.EnvironmentName}.config";
+                nlogConfigFilename = $"nlog.{Startup.HostingEnvironment.EnvironmentName}.config";
             }
  
             loggerFactory.AddConsole();
-            loggerFactory.ConfigureNLog(Path.Combine(HostingEnvironment.ContentRootPath, nlogConfigFilename));
+            loggerFactory.ConfigureNLog(Path.Combine(Startup.HostingEnvironment.ContentRootPath, nlogConfigFilename));
             loggerFactory.AddNLog();
  
             ILogger logger = loggerFactory.CreateLogger("Security Service");
@@ -136,7 +133,7 @@ namespace OAuth2SecurityService.Service
             app.UseMvcWithDefaultRoute();
 
             // Setup the database
-            if (!HostingEnvironment.IsEnvironment("IntegrationTest"))
+            if (!Startup.HostingEnvironment.IsEnvironment("IntegrationTest"))
             {
                 this.InitialiseDatabase(app, env).Wait();
             }
@@ -157,9 +154,9 @@ namespace OAuth2SecurityService.Service
         /// <returns></returns>
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            ConfigureMiddlewareServices(services);
+            Startup.ConfigureMiddlewareServices(services);
  
-            IContainer container = GetConfiguredContainer(services, HostingEnvironment);
+            IContainer container = Startup.GetConfiguredContainer(services, Startup.HostingEnvironment);
  
             return container.GetInstance<IServiceProvider>();
         }
@@ -174,18 +171,18 @@ namespace OAuth2SecurityService.Service
         /// <returns></returns>
         public static IContainer GetConfiguredContainer(IServiceCollection services, IHostingEnvironment hostingEnvironment)
         {
-            ConfigureCommonServices(services);
+            Startup.ConfigureCommonServices(services);
  
             var container = new Container();
-            container.Configure(ConfigureCommonContainer);
+            container.Configure(Startup.ConfigureCommonContainer);
  
             if (hostingEnvironment.IsDevelopment())
             {
-                container.Configure(ConfigureDevelopmentContainer);
+                container.Configure(Startup.ConfigureDevelopmentContainer);
             }
             else
             {
-                container.Configure(ConfigureProductionContainer);
+                container.Configure(Startup.ConfigureProductionContainer);
             }
  
             container.Populate(services);
@@ -207,25 +204,25 @@ namespace OAuth2SecurityService.Service
             
             services.AddIdentity<IdentityUser, IdentityRole>(o =>
             {
-                o.Password.RequireDigit = Configuration.GetValue<Boolean>("IdentityOptions:PasswordOptions:RequireDigit");
+                o.Password.RequireDigit = Startup.Configuration.GetValue<Boolean>("IdentityOptions:PasswordOptions:RequireDigit");
                 o.Password.RequireLowercase =
-                    Configuration.GetValue<Boolean>("IdentityOptions:PasswordOptions:RequireLowercase");
+                    Startup.Configuration.GetValue<Boolean>("IdentityOptions:PasswordOptions:RequireLowercase");
                 o.Password.RequireUppercase =
-                    Configuration.GetValue<Boolean>("IdentityOptions:PasswordOptions:RequireUppercase");
+                    Startup.Configuration.GetValue<Boolean>("IdentityOptions:PasswordOptions:RequireUppercase");
                 o.Password.RequireNonAlphanumeric =
-                    Configuration.GetValue<Boolean>("IdentityOptions:PasswordOptions:RequireNonAlphanumeric");
-                o.Password.RequiredLength = Configuration.GetValue<Int32>("IdentityOptions:PasswordOptions:RequiredLength");
+                    Startup.Configuration.GetValue<Boolean>("IdentityOptions:PasswordOptions:RequireNonAlphanumeric");
+                o.Password.RequiredLength = Startup.Configuration.GetValue<Int32>("IdentityOptions:PasswordOptions:RequiredLength");
             }).AddEntityFrameworkStores<AuthenticationDbContext>().AddDefaultTokenProviders();
             
-            if (HostingEnvironment.IsEnvironment("IntegrationTest"))
+            if (Startup.HostingEnvironment.IsEnvironment("IntegrationTest"))
             {
                 services.AddIdentityServer(options =>
                     {
                         options.Events.RaiseSuccessEvents = true;
                         options.Events.RaiseFailureEvents = true;
                         options.Events.RaiseErrorEvents = true;
-                        options.PublicOrigin = Configuration.GetValue<String>("ServiceOptions:PublicOrigin");
-                        options.IssuerUri = Configuration.GetValue<String>("ServiceOptions:PublicOrigin");
+                        options.PublicOrigin = Startup.Configuration.GetValue<String>("ServiceOptions:PublicOrigin");
+                        options.IssuerUri = Startup.Configuration.GetValue<String>("ServiceOptions:PublicOrigin");
                     })
                     .AddDeveloperSigningCredential()
                     .AddAspNetIdentity<IdentityUser>()
@@ -249,15 +246,15 @@ namespace OAuth2SecurityService.Service
                 String migrationsAssembly = typeof(AuthenticationDbContext).GetTypeInfo().Assembly.GetName().Name;
 
                 services.AddDbContext<ConfigurationDbContext>(builder =>
-                        builder.UseMySql(ConfigurationConnectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
+                        builder.UseMySql(Startup.ConfigurationConnectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
                     .AddTransient<ConfigurationDbContext>();
 
                 services.AddDbContext<PersistedGrantDbContext>(builder =>
-                        builder.UseMySql(PersistedGrantStoreConenctionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
+                        builder.UseMySql(Startup.PersistedGrantStoreConenctionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
                     .AddTransient<PersistedGrantDbContext>();
 
                 services.AddDbContext<AuthenticationDbContext>(builder =>
-                        builder.UseMySql(AuthenticationConenctionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
+                        builder.UseMySql(Startup.AuthenticationConenctionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
                     .AddTransient<AuthenticationDbContext>();
 
                 services.AddIdentityServer(options =>
@@ -265,13 +262,13 @@ namespace OAuth2SecurityService.Service
                             options.Events.RaiseSuccessEvents = true;
                             options.Events.RaiseFailureEvents = true;
                             options.Events.RaiseErrorEvents = true;
-                            options.PublicOrigin = Configuration.GetValue<String>("ServiceOptions:PublicOrigin");
-                            options.IssuerUri = Configuration.GetValue<String>("ServiceOptions:PublicOrigin");
+                            options.PublicOrigin = Startup.Configuration.GetValue<String>("ServiceOptions:PublicOrigin");
+                            options.IssuerUri = Startup.Configuration.GetValue<String>("ServiceOptions:PublicOrigin");
                         })
                     .AddConfigurationStore()
                     .AddOperationalStore()
                     .AddDeveloperSigningCredential()
-                    .AddIdentityServerStorage(ConfigurationConnectionString)
+                    .AddIdentityServerStorage(Startup.ConfigurationConnectionString)
                     .AddAspNetIdentity<IdentityUser>()
                     .AddJwtBearerClientAuthentication();                
             }
@@ -366,7 +363,7 @@ namespace OAuth2SecurityService.Service
                 ConfigurationDbContext configurationDbContext = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
                 AuthenticationDbContext authenticationDbContext = scope.ServiceProvider.GetRequiredService<AuthenticationDbContext>();
 
-                var seedingType = Configuration.GetValue<SeedingType>("SeedingType");
+                var seedingType = Startup.Configuration.GetValue<SeedingType>("SeedingType");
 
                 if (seedingType == SeedingType.Production)
                 {

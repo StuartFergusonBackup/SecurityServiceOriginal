@@ -1,22 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Ductus.FluentDocker.Builders;
-using Ductus.FluentDocker.Model.Builders;
-using Ductus.FluentDocker.Services;
-using Ductus.FluentDocker.Services.Extensions;
-using TechTalk.SpecFlow;
-
-namespace OAuth2SecurityService.IntegrationTests.Specflow.Common
+﻿namespace SecurityService.IntegrationTests.Common
 {
+    using System;
+    using Ductus.FluentDocker.Builders;
+    using Ductus.FluentDocker.Model.Builders;
+    using Ductus.FluentDocker.Services;
+    using Ductus.FluentDocker.Services.Extensions;
+    using TechTalk.SpecFlow;
+
     [Binding]
     public class GenericSteps
     {

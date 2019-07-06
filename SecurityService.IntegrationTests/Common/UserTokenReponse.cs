@@ -1,8 +1,8 @@
-using System;
-using Newtonsoft.Json;
-
-namespace OAuth2SecurityService.IntegrationTests
+namespace SecurityService.IntegrationTests.Common
 {
+    using System;
+    using Newtonsoft.Json;
+
     public class UserTokenReponse
     {
         #region Constructors
