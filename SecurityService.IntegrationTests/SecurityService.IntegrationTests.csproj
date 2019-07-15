@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="User\GetUser.feature" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Ductus.FluentDocker" Version="2.6.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.0-preview-20181205-02" />
     <PackageReference Include="Shouldly" Version="3.0.2" />
@@ -20,7 +24,6 @@
   <ItemGroup>
     <Folder Include="Common\" />
     <Folder Include="GetToken\" />
-    <Folder Include="User\" />
     <Folder Include="Role\" />
   </ItemGroup>
 
@@ -29,10 +32,35 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="GetToken\GetClientToken.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GetClientToken.feature</DependentUpon>
+    </Compile>
     <Compile Update="GetToken\GetPasswordToken.feature.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>GetPasswordToken.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Role\CreateRole.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CreateRole.feature</DependentUpon>
+    </Compile>
+    <Compile Update="Role\GetRole.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GetRole.feature</DependentUpon>
+    </Compile>
+    <Compile Update="User\GetUser.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GetUser.feature</DependentUpon>
+    </Compile>
+    <Compile Update="User\RegisterUser.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RegisterUser.feature</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -40,6 +68,10 @@
     <None Update="GetToken\GetClientToken.feature">
       <Generator></Generator>
     </None>
+    <SpecFlowFeatureFiles Update="User\GetUser.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GetUser.feature.cs</LastGenOutput>
+    </SpecFlowFeatureFiles>
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -48,6 +80,7 @@
   <ItemGroup>
     <SpecFlowFeatureFiles Update="GetToken\GetClientToken.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GetClientToken.feature.cs</LastGenOutput>
     </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="GetToken\GetPasswordToken.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -55,12 +88,19 @@
     </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Role\CreateRole.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CreateRole.feature.cs</LastGenOutput>
     </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="Role\GetRole.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GetRole.feature.cs</LastGenOutput>
     </SpecFlowFeatureFiles>
     <SpecFlowFeatureFiles Update="User\RegisterUser.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RegisterUser.feature.cs</LastGenOutput>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="User\GetUser.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GetUser.feature.cs</LastGenOutput>
     </SpecFlowFeatureFiles>
   </ItemGroup>
 </Project>

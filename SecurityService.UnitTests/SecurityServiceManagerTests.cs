@@ -198,6 +198,86 @@
             Should.Throw<ArgumentNullException>(async () => { await securityServiceManager.GetRoleByName(roleName, CancellationToken.None); });
         }
 
+        [Fact]
+        public async Task SecurityServiceManager_GetUserByUserId_UserDataReturned()
+        {
+            TestScenario testScenario = TestScenario.GetUserByUserIdSuccess;
+            SecurityServiceManager securityServiceManager = this.SetupSecurityServiceManager(testScenario);
+
+            GetUserResponse response = await securityServiceManager.GetUserByUserId(Guid.Parse(SecurityServiceManagerTestData.User1Id), CancellationToken.None);
+
+            response.UserId.ShouldBe(Guid.Parse(SecurityServiceManagerTestData.User1Id));
+            response.UserName.ShouldBe(SecurityServiceManagerTestData.UserName);
+            response.Claims.ShouldNotBeEmpty();
+            response.Email.ShouldBe(SecurityServiceManagerTestData.EmailAddress);
+            response.PhoneNumber.ShouldBe(SecurityServiceManagerTestData.PhoneNumber);
+            response.Roles.ShouldBe(SecurityServiceManagerTestData.Roles);
+        }
+
+        [Fact]
+        public async Task SecurityServiceManager_GetUserByUserId_UserNotFound_ErrorThrown()
+        {
+            TestScenario testScenario = TestScenario.GetUserByUserIdUserNotFound;
+            SecurityServiceManager securityServiceManager = this.SetupSecurityServiceManager(testScenario);
+
+            Should.Throw<NotFoundException>(async () =>
+                                            {
+                                                await securityServiceManager.GetUserByUserId(Guid.Parse(SecurityServiceManagerTestData.User1Id), CancellationToken.None);
+                                            });
+        }
+
+        [Fact]
+        public async Task SecurityServiceManager_GetUserByUserId_InvalidData_ErrorThrown()
+        {
+            TestScenario testScenario = TestScenario.GetUserByUserIdInvalidId;
+            SecurityServiceManager securityServiceManager = this.SetupSecurityServiceManager(testScenario);
+
+            Should.Throw<ArgumentNullException>(async () =>
+                                            {
+                                                await securityServiceManager.GetUserByUserId(Guid.Empty, CancellationToken.None);
+                                            });
+        }
+
+        [Fact]
+        public async Task SecurityServiceManager_GetUserByUserName_UserDataReturned()
+        {
+            TestScenario testScenario = TestScenario.GetUserByUserNameSuccess;
+            SecurityServiceManager securityServiceManager = this.SetupSecurityServiceManager(testScenario);
+
+            IdentityUser response = await securityServiceManager.GetUserByUserName(SecurityServiceManagerTestData.UserName, CancellationToken.None);
+
+            response.Id.ShouldBe(SecurityServiceManagerTestData.User1Id);
+            response.UserName.ShouldBe(SecurityServiceManagerTestData.UserName);
+            response.Email.ShouldBe(SecurityServiceManagerTestData.EmailAddress);
+            response.PhoneNumber.ShouldBe(SecurityServiceManagerTestData.PhoneNumber);
+        }
+
+        [Fact]
+        public async Task SecurityServiceManager_GetUserByUserName_UserNotFound_ErrorThrown()
+        {
+            TestScenario testScenario = TestScenario.GetUserByUserNameNotFound;
+            SecurityServiceManager securityServiceManager = this.SetupSecurityServiceManager(testScenario);
+
+            Should.Throw<NotFoundException>(async () =>
+            {
+                await securityServiceManager.GetUserByUserName(SecurityServiceManagerTestData.UserName, CancellationToken.None);
+            });
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        public async Task SecurityServiceManager_GetUserByUserName_InvalidData_ErrorThrown(String userName)
+        {
+            TestScenario testScenario = TestScenario.GetUserByUserNameInvalidUserName;
+            SecurityServiceManager securityServiceManager = this.SetupSecurityServiceManager(testScenario);
+
+            Should.Throw<ArgumentNullException>(async () =>
+            {
+                await securityServiceManager.GetUserByUserName(userName, CancellationToken.None);
+            });
+        }
+
         #endregion
     }
 }

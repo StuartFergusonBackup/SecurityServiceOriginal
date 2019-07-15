@@ -15,8 +15,9 @@
         {
             List<ApiResource> apiResources = new List<ApiResource>();
                
-            apiResources.Add(new ApiResource("managementapi", new List<String> { "GolfClubId", "PlayerId", "role" } ));                      
-            
+            apiResources.Add(new ApiResource("managementapi", new List<String> { "GolfClubId", "PlayerId", "role" } ));
+            apiResources.Add(new ApiResource("securirtyserviceapi"));
+
             return apiResources;
         }
         #endregion

@@ -190,6 +190,45 @@
         }
 
         /// <summary>
+        /// Gets the user by user identifier.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<GetUserResponse> GetUserByUserId(Guid userId,
+                                                           CancellationToken cancellationToken)
+        {
+            Guard.ThrowIfInvalidGuid(userId, nameof(userId));
+
+            IdentityUser user = await this.UserManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+            {
+                throw new NotFoundException($"No user found with user Id {userId}");
+            }
+
+            GetUserResponse response = new GetUserResponse();
+            response.Email = user.Email;
+            response.PhoneNumber = user.PhoneNumber;
+            response.UserId = userId;
+            response.UserName = user.UserName;
+
+            // Get the users roles
+            IList<String> roles = await this.UserManager.GetRolesAsync(user);
+            response.Roles = roles.ToList();
+
+            // Get the users claims
+            IList<Claim> claims = await this.UserManager.GetClaimsAsync(user);
+            response.Claims = new Dictionary<String, String>();
+            foreach (Claim claim in claims)
+            {
+                response.Claims.Add(claim.Type, claim.Value);
+            }
+
+            return response;
+        }
+
+        /// <summary>
         /// Gets the name of the user by user.
         /// </summary>
         /// <param name="userName">Name of the user.</param>
@@ -198,7 +237,14 @@
         public async Task<IdentityUser> GetUserByUserName(String userName,
                                                           CancellationToken cancellationToken)
         {
+            Guard.ThrowIfNullOrEmpty(userName, nameof(userName));
+
             IdentityUser user = await this.UserManager.FindByNameAsync(userName);
+
+            if (user == null)
+            {
+                throw new NotFoundException($"No user found with user name {userName}");
+            }
 
             return user;
         }

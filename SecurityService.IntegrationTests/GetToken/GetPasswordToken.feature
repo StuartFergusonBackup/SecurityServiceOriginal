@@ -1,6 +1,6 @@
 ﻿@gettoken
 Feature: GetPasswordToken
-	In order to use the OAuth2 Security Service
+	In order to use the Security Service
 	As a user
 	I want to be able to request a Password Token
 

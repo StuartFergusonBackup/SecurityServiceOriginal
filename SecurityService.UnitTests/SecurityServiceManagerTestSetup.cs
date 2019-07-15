@@ -42,10 +42,12 @@
             RegisterUserAddClaimsFailed,
             RegisterUserAddClaimsFailedDeleteFailed,
             GetUserByUserIdSuccess,
-            GetUserByUserNameSuccess,
-            GetUserByEmailAddressSuccess,
+            GetUserByUserIdUserNotFound,
             GetUserByUserIdInvalidId,
+            GetUserByUserNameSuccess,
+            GetUserByUserNameNotFound,
             GetUserByUserNameInvalidUserName,
+            GetUserByEmailAddressSuccess,
             GetUserByEmailAddressInvalidEmailAddress,
             ChangePasswordSuccess,
             ChangePasswordInvalidData,
@@ -64,7 +66,6 @@
             CreateRoleCreateRoleFailed,
             GetRoleSuccess,
             GetRoleRoleNotFound,
-            GetRoleInvalidData,
         }
 
         private void SetupPasswordHasher(TestScenario testScenario)
@@ -211,10 +212,18 @@
                     .Returns(Task.CompletedTask);
             }
 
-            if (testScenario == TestScenario.ChangePasswordUserNotFound)
+            if (testScenario == TestScenario.ChangePasswordUserNotFound ||
+                testScenario == TestScenario.GetUserByUserIdUserNotFound)
             {
                 IdentityUser nullUser = null;
                 this.UserStore.Setup(us => us.FindByIdAsync(It.IsAny<String>(), CancellationToken.None))
+                    .ReturnsAsync(nullUser);
+            }
+
+            if (testScenario == TestScenario.GetUserByUserNameNotFound)
+            {
+                IdentityUser nullUser = null;
+                this.UserStore.Setup(us => us.FindByNameAsync(It.IsAny<String>(), CancellationToken.None))
                     .ReturnsAsync(nullUser);
             }
 
@@ -224,6 +233,30 @@
                     .ReturnsAsync(new IdentityUser("testuser"));
                 this.UserStore.Setup(us => us.GetUserIdAsync(It.IsAny<IdentityUser>(), CancellationToken.None))
                     .ReturnsAsync("userid");
+            }
+
+            if (testScenario == TestScenario.GetUserByUserIdSuccess)
+            {
+                this.UserStore.Setup(us => us.FindByIdAsync(It.IsAny<String>(), CancellationToken.None))
+                    .ReturnsAsync(new IdentityUser
+                                  {
+                                      Email = SecurityServiceManagerTestData.EmailAddress, 
+                                      PhoneNumber = SecurityServiceManagerTestData.PhoneNumber,
+                                      UserName = SecurityServiceManagerTestData.UserName,
+                                      Id = SecurityServiceManagerTestData.User1Id,
+                                  });
+            }
+
+            if (testScenario == TestScenario.GetUserByUserNameSuccess)
+            {
+                this.UserStore.Setup(us => us.FindByNameAsync(It.IsAny<String>(), CancellationToken.None))
+                    .ReturnsAsync(new IdentityUser
+                                  {
+                                      Email = SecurityServiceManagerTestData.EmailAddress,
+                                      PhoneNumber = SecurityServiceManagerTestData.PhoneNumber,
+                                      UserName = SecurityServiceManagerTestData.UserName,
+                                      Id = SecurityServiceManagerTestData.User1Id,
+                                  });
             }
         }
 
@@ -367,7 +400,7 @@
                 this.UserStore.As<IUserRoleStore<IdentityUser>>()
                     .Setup(us => us.GetRolesAsync(It.IsAny<IdentityUser>(), CancellationToken.None)).ReturnsAsync(
                         SecurityServiceManagerTestData.UserRoles
-                            .Where(r => r.Key == SecurityServiceManagerTestData.TestDataUserId)
+                            .Where(r => r.Key == SecurityServiceManagerTestData.User1Id)
                             .Select(r => r.Value).First());
             }
         }
@@ -398,7 +431,7 @@
                 this.UserStore.As<IUserClaimStore<IdentityUser>>()
                     .Setup(us => us.GetClaimsAsync(It.IsAny<IdentityUser>(), CancellationToken.None)).ReturnsAsync(
                         SecurityServiceManagerTestData.UserClaims
-                            .Where(r => r.Key == SecurityServiceManagerTestData.TestDataUserId).Select(r => r.Value)
+                            .Where(r => r.Key == SecurityServiceManagerTestData.User1Id).Select(r => r.Value)
                             .First());
             }
         }

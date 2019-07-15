@@ -1,6 +1,6 @@
 ﻿@role
 Feature: Create Role
-	In order to use the OAuth2 Security Service
+	In order to use the Security Service
 	As an administrator
 	I want to be able to create roles
 

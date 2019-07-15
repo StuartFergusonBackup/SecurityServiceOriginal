@@ -37,8 +37,8 @@ namespace SecurityService.IntegrationTests.Role
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Get Role", "\tIn order to use the OAuth2 Security Service\r\n\tAs an administrator\r\n\tI want to be" +
-                    " able to retrieve roles", ProgrammingLanguage.CSharp, new string[] {
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Get Role", "\tIn order to use the Security Service\r\n\tAs an administrator\r\n\tI want to be able t" +
+                    "o retrieve roles", ProgrammingLanguage.CSharp, new string[] {
                         "role"});
             testRunner.OnFeatureStart(featureInfo);
         }

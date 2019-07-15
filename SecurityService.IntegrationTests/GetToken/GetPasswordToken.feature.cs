@@ -37,8 +37,8 @@ namespace SecurityService.IntegrationTests.GetToken
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "GetPasswordToken", "\tIn order to use the OAuth2 Security Service\r\n\tAs a user\r\n\tI want to be able to r" +
-                    "equest a Password Token", ProgrammingLanguage.CSharp, new string[] {
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "GetPasswordToken", "\tIn order to use the Security Service\r\n\tAs a user\r\n\tI want to be able to request " +
+                    "a Password Token", ProgrammingLanguage.CSharp, new string[] {
                         "gettoken"});
             testRunner.OnFeatureStart(featureInfo);
         }
