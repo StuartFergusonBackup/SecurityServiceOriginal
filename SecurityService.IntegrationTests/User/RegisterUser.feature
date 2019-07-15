@@ -1,13 +1,12 @@
 ﻿@user
 Feature: Register User
-	In order to use the OAuth2 Security Service
+	In order to use the Security Service
 	As a user
 	I want to be able to register my details
 
 Background: 
 	Given the Security Service is running
 
-@mytag
 Scenario: Register with a password
 	Given I have my user details to register
 	And I have provided a password

@@ -37,8 +37,8 @@ namespace SecurityService.IntegrationTests.User
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Register User", "\tIn order to use the OAuth2 Security Service\r\n\tAs a user\r\n\tI want to be able to r" +
-                    "egister my details", ProgrammingLanguage.CSharp, new string[] {
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Register User", "\tIn order to use the Security Service\r\n\tAs a user\r\n\tI want to be able to register" +
+                    " my details", ProgrammingLanguage.CSharp, new string[] {
                         "user"});
             testRunner.OnFeatureStart(featureInfo);
         }
@@ -90,25 +90,23 @@ namespace SecurityService.IntegrationTests.User
         [Xunit.FactAttribute(DisplayName="Register with a password")]
         [Xunit.TraitAttribute("FeatureTitle", "Register User")]
         [Xunit.TraitAttribute("Description", "Register with a password")]
-        [Xunit.TraitAttribute("Category", "mytag")]
         public virtual void RegisterWithAPassword()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Register with a password", null, new string[] {
-                        "mytag"});
-#line 11
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Register with a password", null, ((string[])(null)));
+#line 10
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 7
 this.FeatureBackground();
-#line 12
+#line 11
  testRunner.Given("I have my user details to register", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 13
+#line 12
  testRunner.And("I have provided a password", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 14
+#line 13
  testRunner.When("I register", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 15
+#line 14
  testRunner.Then("my details should be registered", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 16
+#line 15
  testRunner.And("my new User Id will be returned", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();

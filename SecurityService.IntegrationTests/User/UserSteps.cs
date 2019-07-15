@@ -48,8 +48,8 @@
         [When(@"I register")]
         public async Task WhenIRegister()
         {
-            var request = this.ScenarioContext.Get<RegisterUserRequest>("RegisterUserRequest");
-            var password = this.ScenarioContext.Get<String>("Password");
+            RegisterUserRequest request = this.ScenarioContext.Get<RegisterUserRequest>("RegisterUserRequest");
+            String password = this.ScenarioContext.Get<String>("Password");
 
             // Update the request with the password
             request.Password = password;
@@ -69,19 +69,52 @@
         [Then(@"my details should be registered")]
         public void ThenMyDetailsShouldBeRegistered()
         {
-            var httpResponse = this.ScenarioContext.Get<HttpResponseMessage>("RegisterUserHttpResponse");
+            HttpResponseMessage httpResponse = this.ScenarioContext.Get<HttpResponseMessage>("RegisterUserHttpResponse");
             httpResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Then(@"my new User Id will be returned")]
         public async Task ThenMyNewUserIdWillBeReturned()
         {
-            var httpResponse = this.ScenarioContext.Get<HttpResponseMessage>("RegisterUserHttpResponse");
+            HttpResponseMessage httpResponse = this.ScenarioContext.Get<HttpResponseMessage>("RegisterUserHttpResponse");
 
-            var responseData = JsonConvert.DeserializeObject<RegisterUserResponse>(await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false));
+            RegisterUserResponse responseData = JsonConvert.DeserializeObject<RegisterUserResponse>(await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false));
 
             responseData.UserId.ShouldNotBe(Guid.Empty);
+            this.ScenarioContext["UserId"] = responseData.UserId;
         }
+
+        [Given(@"I have the Id of a registered user")]
+        public void GivenIHaveTheIdOfARegisteredUser()
+        {
+            Guid userId = this.ScenarioContext.Get<Guid>("UserId");
+            userId.ShouldNotBe(Guid.Empty);
+        }
+
+        [When(@"I get the users details by Id")]
+        public async Task WhenIGetTheUsersDetailsById()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri($"http://127.0.0.1:{this.SecurityServicePort}");
+                Guid userId = this.ScenarioContext.Get<Guid>("UserId");
+
+                this.ScenarioContext["GetUserHttpResponse"] = await client
+                                                                         .GetAsync($"/api/user?userId={userId}", CancellationToken.None).ConfigureAwait(false);
+            }
+        }
+
+        [Then(@"the user details will be returned")]
+        public async Task ThenTheUserDetailsWillBeReturned()
+        {
+            HttpResponseMessage httpResponse = this.ScenarioContext.Get<HttpResponseMessage>("RegisterUserHttpResponse");
+            httpResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+            GetUserResponse responseData = JsonConvert.DeserializeObject<GetUserResponse>(await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false));
+
+            responseData.ShouldNotBeNull();
+        }
+
 
     }
 }

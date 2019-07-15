@@ -273,7 +273,7 @@
                     .AddJwtBearerClientAuthentication();                
             }
             services.AddCors();
-            
+
             // Read the authentication configuration
             //var securityConfig = new SecurityServiceConfiguration();
             //Configuration.GetSection("SecurityConfiguration").Bind(securityConfig);

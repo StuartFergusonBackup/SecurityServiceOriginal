@@ -65,6 +65,15 @@
                                              CancellationToken cancellationToken);
 
         /// <summary>
+        /// Gets the user by user identifier.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<GetUserResponse> GetUserByUserId(Guid userId,
+                                             CancellationToken cancellationToken);
+
+        /// <summary>
         /// Registers the user.
         /// </summary>
         /// <param name="request">The request.</param>
