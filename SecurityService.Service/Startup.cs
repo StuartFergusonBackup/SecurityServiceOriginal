@@ -246,15 +246,15 @@
                 String migrationsAssembly = typeof(AuthenticationDbContext).GetTypeInfo().Assembly.GetName().Name;
 
                 services.AddDbContext<ConfigurationDbContext>(builder =>
-                        builder.UseMySql(Startup.ConfigurationConnectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
+                        builder.UseSqlServer(Startup.ConfigurationConnectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
                     .AddTransient<ConfigurationDbContext>();
 
                 services.AddDbContext<PersistedGrantDbContext>(builder =>
-                        builder.UseMySql(Startup.PersistedGrantStoreConenctionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
+                        builder.UseSqlServer(Startup.PersistedGrantStoreConenctionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
                     .AddTransient<PersistedGrantDbContext>();
 
                 services.AddDbContext<AuthenticationDbContext>(builder =>
-                        builder.UseMySql(Startup.AuthenticationConenctionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
+                        builder.UseSqlServer(Startup.AuthenticationConenctionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
                     .AddTransient<AuthenticationDbContext>();
 
                 services.AddIdentityServer(options =>
@@ -288,7 +288,7 @@
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "OAuth2 Security Service", Version = "v1" });
+                c.SwaggerDoc("v1", new Info { Title = "Security Service", Version = "v1" });
             });
         }
         #endregion

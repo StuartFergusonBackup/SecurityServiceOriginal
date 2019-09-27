@@ -19,7 +19,7 @@ namespace SecurityService.Manager.DbContexts
             {
                 try
                 {
-                    if (persistedGrantDbContext.Database.IsMySql())
+                    if (persistedGrantDbContext.Database.IsSqlServer())
                     {
                         persistedGrantDbContext.Database.Migrate();
                     }
@@ -54,7 +54,7 @@ namespace SecurityService.Manager.DbContexts
             {
                 try
                 {
-                    if (authenticationDbContext.Database.IsMySql())
+                    if (authenticationDbContext.Database.IsSqlServer())
                     {
                         authenticationDbContext.Database.Migrate();
                     }
@@ -93,7 +93,7 @@ namespace SecurityService.Manager.DbContexts
             {
                 try
                 {
-                    if (configurationDbContext.Database.IsMySql())
+                    if (configurationDbContext.Database.IsSqlServer())
                     {
                         configurationDbContext.Database.Migrate();
                     }
@@ -102,7 +102,7 @@ namespace SecurityService.Manager.DbContexts
                     DatabaseSeeding.AddApiResources(configurationDbContext, seedingType);
                     DatabaseSeeding.AddIdentityResources(configurationDbContext, seedingType);
 
-                    configurationDbContext.SaveChanges();
+                    //configurationDbContext.SaveChanges();
 
                     isDbInitialised = true;
                     break;
@@ -134,6 +134,7 @@ namespace SecurityService.Manager.DbContexts
                 if (!foundClient)
                 {
                     context.Clients.Add(client.ToEntity());
+                    context.SaveChanges();
                 }
             }
         }
@@ -149,6 +150,7 @@ namespace SecurityService.Manager.DbContexts
                 if (!foundResource)
                 {
                     context.ApiResources.Add(apiResource.ToEntity());
+                    context.SaveChanges();
                 }
             }
         }
@@ -164,6 +166,7 @@ namespace SecurityService.Manager.DbContexts
                 if (!foundResource)
                 {
                     context.IdentityResources.Add(identityResource.ToEntity());
+                    context.SaveChanges();
                 }
             }
         }
