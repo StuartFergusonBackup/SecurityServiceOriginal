@@ -14,7 +14,6 @@
         public static List<ApiResource> GetApiResources(SeedingType seedingType)
         {
             List<ApiResource> apiResources = new List<ApiResource>();
-               
             apiResources.Add(new ApiResource("managementapi", new List<String> { "GolfClubId", "PlayerId", "role" } ));
             apiResources.Add(new ApiResource("securirtyserviceapi"));
 
