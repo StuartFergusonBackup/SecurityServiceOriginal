@@ -1,50 +1,28 @@
 namespace SecurityService.Manager.DbContexts
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using IdentityServer4.EntityFramework.DbContexts;
     using IdentityServer4.EntityFramework.Mappers;
+    using IdentityServer4.Models;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using SeedData;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class DatabaseSeeding
     {
-        public static void InitialisePersistedGrantDatabase(PersistedGrantDbContext persistedGrantDbContext,
-                                                            SeedingType seedingType)
-        {
-            Boolean isDbInitialised = false;
-            Int32 retryCounter = 0;
-            while (retryCounter < 20 && !isDbInitialised)
-            {
-                try
-                {
-                    if (persistedGrantDbContext.Database.IsSqlServer())
-                    {
-                        persistedGrantDbContext.Database.Migrate();
-                    }
+        #region Methods
 
-                    persistedGrantDbContext.SaveChanges();
-
-                    isDbInitialised = true;
-                    break;
-                }
-                catch(Exception ex)
-                {
-                    retryCounter++;
-                    Thread.Sleep(10000);
-                }
-            }
-
-            if (!isDbInitialised)
-            {
-                String connString = persistedGrantDbContext.Database.GetDbConnection().ConnectionString;
-
-                Exception newException = new Exception($"Error initialising Db with Connection String [{connString}]");
-                throw newException;
-            }
-        }
-
+        /// <summary>
+        /// Initialises the authentication database.
+        /// </summary>
+        /// <param name="authenticationDbContext">The authentication database context.</param>
+        /// <param name="seedingType">Type of the seeding.</param>
         public static void InitialiseAuthenticationDatabase(AuthenticationDbContext authenticationDbContext,
                                                             SeedingType seedingType)
         {
@@ -84,8 +62,13 @@ namespace SecurityService.Manager.DbContexts
             }
         }
 
+        /// <summary>
+        /// Initialises the configuration database.
+        /// </summary>
+        /// <param name="configurationDbContext">The configuration database context.</param>
+        /// <param name="seedingType">Type of the seeding.</param>
         public static void InitialiseConfigurationDatabase(ConfigurationDbContext configurationDbContext,
-                                              SeedingType seedingType)
+                                                           SeedingType seedingType)
         {
             Boolean isDbInitialised = false;
             Int32 retryCounter = 0;
@@ -122,30 +105,60 @@ namespace SecurityService.Manager.DbContexts
                 throw newException;
             }
         }
-        
-        private static void AddClients(ConfigurationDbContext context, SeedingType seedingType)
+
+        /// <summary>
+        /// Initialises the persisted grant database.
+        /// </summary>
+        /// <param name="persistedGrantDbContext">The persisted grant database context.</param>
+        /// <param name="seedingType">Type of the seeding.</param>
+        public static void InitialisePersistedGrantDatabase(PersistedGrantDbContext persistedGrantDbContext,
+                                                            SeedingType seedingType)
         {
-            var clientsToAdd = ClientSeedData.GetClients(seedingType);
-
-            foreach (var client in clientsToAdd)
+            Boolean isDbInitialised = false;
+            Int32 retryCounter = 0;
+            while (retryCounter < 20 && !isDbInitialised)
             {
-                var foundClient = context.Clients.Any(a => a.ClientId == client.ClientId);
-
-                if (!foundClient)
+                try
                 {
-                    context.Clients.Add(client.ToEntity());
-                    context.SaveChanges();
+                    if (persistedGrantDbContext.Database.IsSqlServer())
+                    {
+                        persistedGrantDbContext.Database.Migrate();
+                    }
+
+                    persistedGrantDbContext.SaveChanges();
+
+                    isDbInitialised = true;
+                    break;
                 }
+                catch(Exception ex)
+                {
+                    retryCounter++;
+                    Thread.Sleep(10000);
+                }
+            }
+
+            if (!isDbInitialised)
+            {
+                String connString = persistedGrantDbContext.Database.GetDbConnection().ConnectionString;
+
+                Exception newException = new Exception($"Error initialising Db with Connection String [{connString}]");
+                throw newException;
             }
         }
 
-        private static void AddApiResources(ConfigurationDbContext context, SeedingType seedingType)
+        /// <summary>
+        /// Adds the API resources.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="seedingType">Type of the seeding.</param>
+        private static void AddApiResources(ConfigurationDbContext context,
+                                            SeedingType seedingType)
         {
-            var apiResources = ApiResourceSeedData.GetApiResources(seedingType);
+            List<ApiResource> apiResources = ApiResourceSeedData.GetApiResources(seedingType);
 
-            foreach (var apiResource in apiResources)
+            foreach (ApiResource apiResource in apiResources)
             {
-                var foundResource = context.ApiResources.Any(a => a.Name == apiResource.Name);
+                Boolean foundResource = context.ApiResources.Any(a => a.Name == apiResource.Name);
 
                 if (!foundResource)
                 {
@@ -155,13 +168,41 @@ namespace SecurityService.Manager.DbContexts
             }
         }
 
-        private static void AddIdentityResources(ConfigurationDbContext context, SeedingType seedingType)
+        /// <summary>
+        /// Adds the clients.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="seedingType">Type of the seeding.</param>
+        private static void AddClients(ConfigurationDbContext context,
+                                       SeedingType seedingType)
         {
-            var identityResources = IdentityResourceSeedData.GetIdentityResources(seedingType);
+            List<Client> clientsToAdd = ClientSeedData.GetClients(seedingType);
 
-            foreach (var identityResource in identityResources)
+            foreach (Client client in clientsToAdd)
             {
-                var foundResource = context.IdentityResources.Any(a => a.Name == identityResource.Name);
+                Boolean foundClient = context.Clients.Any(a => a.ClientId == client.ClientId);
+
+                if (!foundClient)
+                {
+                    context.Clients.Add(client.ToEntity());
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds the identity resources.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="seedingType">Type of the seeding.</param>
+        private static void AddIdentityResources(ConfigurationDbContext context,
+                                                 SeedingType seedingType)
+        {
+            List<IdentityResource> identityResources = IdentityResourceSeedData.GetIdentityResources(seedingType);
+
+            foreach (IdentityResource identityResource in identityResources)
+            {
+                Boolean foundResource = context.IdentityResources.Any(a => a.Name == identityResource.Name);
 
                 if (!foundResource)
                 {
@@ -171,28 +212,19 @@ namespace SecurityService.Manager.DbContexts
             }
         }
 
-        private static void AddUsers(AuthenticationDbContext context, SeedingType seedingType)
+        /// <summary>
+        /// Adds the roles.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="seedingType">Type of the seeding.</param>
+        private static void AddRoles(AuthenticationDbContext context,
+                                     SeedingType seedingType)
         {
-            var identityUsers = IdentityUserSeedData.GetIdentityUsers(seedingType);
+            List<IdentityRole> roles = RoleSeedData.GetIdentityRoles(seedingType);
 
-            foreach (var identityUser in identityUsers)
+            foreach (IdentityRole role in roles)
             {
-                var foundUser = context.Users.Any(a => a.UserName== identityUser.UserName);
-
-                if (!foundUser)
-                {
-                    context.Users.Add(identityUser);
-                }
-            }
-        }
-
-        private static void AddRoles(AuthenticationDbContext context, SeedingType seedingType)
-        {
-            var roles = RoleSeedData.GetIdentityRoles(seedingType);
-
-            foreach (var role in roles)
-            {
-                var foundRole = context.Roles.Any(a => a.Name== role.Name);
+                Boolean foundRole = context.Roles.Any(a => a.Name == role.Name);
 
                 if (!foundRole)
                 {
@@ -201,13 +233,40 @@ namespace SecurityService.Manager.DbContexts
             }
         }
 
-        private static void AddUsersToRoles(AuthenticationDbContext context, SeedingType seedingType)
+        /// <summary>
+        /// Adds the users.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="seedingType">Type of the seeding.</param>
+        private static void AddUsers(AuthenticationDbContext context,
+                                     SeedingType seedingType)
         {
-            var identityUserRoles = IdentityUserRoleSeedData.GetIdentityUserRoles(seedingType);
+            List<IdentityUser> identityUsers = IdentityUserSeedData.GetIdentityUsers(seedingType);
 
-            foreach (var identityUserRole in identityUserRoles)
+            foreach (IdentityUser identityUser in identityUsers)
             {
-                var foundUserRole = context.UserRoles.Any(a => a.RoleId== identityUserRole.RoleId && a.UserId == identityUserRole.UserId);
+                Boolean foundUser = context.Users.Any(a => a.UserName == identityUser.UserName);
+
+                if (!foundUser)
+                {
+                    context.Users.Add(identityUser);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds the users to roles.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="seedingType">Type of the seeding.</param>
+        private static void AddUsersToRoles(AuthenticationDbContext context,
+                                            SeedingType seedingType)
+        {
+            List<IdentityUserRole<String>> identityUserRoles = IdentityUserRoleSeedData.GetIdentityUserRoles(seedingType);
+
+            foreach (IdentityUserRole<String> identityUserRole in identityUserRoles)
+            {
+                Boolean foundUserRole = context.UserRoles.Any(a => a.RoleId == identityUserRole.RoleId && a.UserId == identityUserRole.UserId);
 
                 if (!foundUserRole)
                 {
@@ -215,5 +274,7 @@ namespace SecurityService.Manager.DbContexts
                 }
             }
         }
+
+        #endregion
     }
 }
