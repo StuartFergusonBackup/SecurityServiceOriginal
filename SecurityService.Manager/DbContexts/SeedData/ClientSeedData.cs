@@ -6,6 +6,9 @@
     using IdentityServer4;
     using IdentityServer4.Models;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class ClientSeedData
     {
         #region Methods
@@ -13,6 +16,7 @@
         /// <summary>
         /// Gets the clients.
         /// </summary>
+        /// <param name="seedingType">Type of the seeding.</param>
         /// <returns></returns>
         public static List<Client> GetClients(SeedingType seedingType)
         {
@@ -26,6 +30,7 @@
             clients.Add(ClientSeedData.CreateGolfHandicapSubscriptionServiceClient(seedingType));
             clients.Add(ClientSeedData.CreateGolfHandicapTestDataGeneratorClient(seedingType));
             clients.Add(ClientSeedData.CreateGolfHandicapAdminWebsiteClient(seedingType));
+            clients.Add(ClientSeedData.CreateGolfHandicapPlayerWebsiteClient(seedingType));
 
             return clients;
         }
@@ -66,6 +71,11 @@
             return client;
         }
 
+        /// <summary>
+        /// Creates the golf handicap admin website client.
+        /// </summary>
+        /// <param name="seedingType">Type of the seeding.</param>
+        /// <returns></returns>
         private static Client CreateGolfHandicapAdminWebsiteClient(SeedingType seedingType)
         {
             Client client = null;
@@ -81,23 +91,24 @@
                 scopes.Add(IdentityServerConstants.StandardScopes.Profile);
                 scopes.Add(IdentityServerConstants.StandardScopes.Email);
 
+                String clientId = "golfhandicap.adminwebsite";
                 client = new Client
                          {
-                             ClientId = "golfhandicap.adminwebsite",
+                             ClientId = clientId,
                              ClientName = "Golf Club Admin Website Client",
                              ClientSecrets =
                              {
-                                 new Secret("golfhandicap.adminwebsite".Sha256())
+                                 new Secret(clientId.Sha256())
                              },
                              AllowedGrantTypes = GrantTypes.Hybrid,
                              AllowedScopes = scopes,
                              AllowOfflineAccess = true,
-                             RedirectUris = ClientSeedData.SetRedirectUris(seedingType),
-                             PostLogoutRedirectUris = ClientSeedData.SetPostLogoutRedirectUris(seedingType),
-                             RequireConsent = false,                            
+                             RedirectUris = ClientSeedData.SetRedirectUris(clientId, seedingType),
+                             PostLogoutRedirectUris = ClientSeedData.SetPostLogoutRedirectUris(clientId, seedingType),
+                             RequireConsent = false
                          };
             }
-            
+
             return client;
         }
 
@@ -131,6 +142,47 @@
                              },
                              AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                              AllowedScopes = scopes
+                         };
+            }
+
+            return client;
+        }
+
+        /// <summary>
+        /// Creates the golf handicap player website client.
+        /// </summary>
+        /// <param name="seedingType">Type of the seeding.</param>
+        /// <returns></returns>
+        private static Client CreateGolfHandicapPlayerWebsiteClient(SeedingType seedingType)
+        {
+            Client client = null;
+
+            // Setup the scopes
+            List<String> scopes = new List<String>();
+            scopes.AddRange(ApiResourceSeedData.GetApiResources(seedingType).Select(y => y.Name).ToList());
+
+            if (seedingType == SeedingType.IntegrationTest || seedingType == SeedingType.Development || seedingType == SeedingType.Staging)
+            {
+                // Add in the standard scopes for GetUserInfo
+                scopes.Add(IdentityServerConstants.StandardScopes.OpenId);
+                scopes.Add(IdentityServerConstants.StandardScopes.Profile);
+                scopes.Add(IdentityServerConstants.StandardScopes.Email);
+
+                String clientId = "golfhandicap.playerwebsite";
+                client = new Client
+                         {
+                             ClientId = clientId,
+                             ClientName = "Golf Club Player Website Client",
+                             ClientSecrets =
+                             {
+                                 new Secret(clientId.Sha256())
+                             },
+                             AllowedGrantTypes = GrantTypes.Hybrid,
+                             AllowedScopes = scopes,
+                             AllowOfflineAccess = true,
+                             RedirectUris = ClientSeedData.SetRedirectUris(clientId, seedingType),
+                             PostLogoutRedirectUris = ClientSeedData.SetPostLogoutRedirectUris(clientId, seedingType),
+                             RequireConsent = false
                          };
             }
 
@@ -207,16 +259,27 @@
         /// <summary>
         /// Sets the post logout redirect uris.
         /// </summary>
-        /// <param name="client">The client.</param>
+        /// <param name="clientId">The client identifier.</param>
         /// <param name="seedingType">Type of the seeding.</param>
-        private static List<String> SetPostLogoutRedirectUris(SeedingType seedingType)
+        /// <returns></returns>
+        private static List<String> SetPostLogoutRedirectUris(String clientId,
+                                                              SeedingType seedingType)
         {
             List<String> redirectUriList = new List<String>();
             switch(seedingType)
             {
                 case SeedingType.Development:
-                    redirectUriList.Add("http://localhost:5005/signout-callback-oidc");
-                    redirectUriList.Add("http://3.9.26.155:5005/signout-callback-oidc");
+                    if (clientId == "golfhandicap.adminwebsite")
+                    {
+                        redirectUriList.Add("http://localhost:5005/signout-callback-oidc");
+                        redirectUriList.Add("http://192.168.1.132:5005/signout-callback-oidc");
+                    }
+                    else if (clientId == "golfhandicap.playerwebsite")
+                    {
+                        redirectUriList.Add("http://localhost:5006/signout-callback-oidc");
+                        redirectUriList.Add("http://192.168.1.132:5006/signout-callback-oidc");
+                    }
+
                     break;
                 case SeedingType.Staging:
                     break;
@@ -230,17 +293,28 @@
         /// <summary>
         /// Sets the redirect uris.
         /// </summary>
-        /// <param name="client">The client.</param>
+        /// <param name="clientId">The client identifier.</param>
         /// <param name="seedingType">Type of the seeding.</param>
-        private static List<String> SetRedirectUris(SeedingType seedingType)
+        /// <returns></returns>
+        private static List<String> SetRedirectUris(String clientId,
+                                                    SeedingType seedingType)
         {
             List<String> redirectUriList = new List<String>();
 
-            switch (seedingType)
+            switch(seedingType)
             {
                 case SeedingType.Development:
-                    redirectUriList.Add("http://localhost:5005/signin-oidc");
-                    redirectUriList.Add("http://3.9.26.155:5005/signin-oidc");
+                    if (clientId == "golfhandicap.adminwebsite")
+                    {
+                        redirectUriList.Add("http://localhost:5005/signin-oidc");
+                        redirectUriList.Add("http://192.168.1.132:5005/signin-oidc");
+                    }
+                    else if (clientId == "golfhandicap.playerwebsite")
+                    {
+                        redirectUriList.Add("http://localhost:5006/signin-oidc");
+                        redirectUriList.Add("http://192.168.1.132:5006/signin-oidc");
+                    }
+
                     break;
                 case SeedingType.Staging:
                     break;
